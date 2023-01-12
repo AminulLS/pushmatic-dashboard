@@ -1,33 +1,70 @@
-import Index from '../partner/Index'
-import ListDetails from '../partner/ListDetails'
-import Lists from '../partner/Lists'
-import Partner from '../layouts/Partner'
+import Index from '../partner/index'
+import Lists from '../partner/lists'
+import ListDetails from '../partner/lists/details/index'
+import ListDevelopers from '../partner/lists/details/developers'
+import ListTesting from '../partner/lists/details/testing'
+import ListIndex from '../partner/lists/index'
+import ListLayout from '../partner/lists/details'
+import Partner from '../layouts/partner'
 
 const items = [
     {
-        title: 'Dashboard',
         path: 'partner',
         element: <Partner />,
-        permissions: ['dashboard'],
+        handle: {
+            title: 'Dashboard',
+            permissions: ['dashboard'],
+        },
         children: [
             {
-                title: 'Dashboard',
                 index: true,
                 element: <Index />,
-                hidden: true,
-                permissions: ['dashboard'],
+                handle: {
+                    title: 'Dashboard',
+                    permissions: ['dashboard'],
+                },
             }, {
-                title: 'Lists',
                 path: 'lists',
                 element: <Lists />,
-                permissions: ['lists_read'],
-            }, {
-                title: 'List Details',
-                path: 'lists/:list_id/*',
-                element: <ListDetails />,
-                hidden: true,
-                permissions: ['lists_read'],
-            }
+                handle: {
+                    title: 'Lists',
+                    permissions: ['lists_read'],
+                },
+                children: [
+                    {
+                        index: true,
+                        element: <ListIndex />,
+                    },
+                    {
+                        path: ':list_id',
+                        element: <ListLayout />,
+                        handle: {
+                            title: 'List Details',
+                            permissions: ['lists_read'],
+                        },
+                        children: [
+                            {
+                                index: true,
+                                element: <ListDetails />,
+                            }, {
+                                path: 'developers',
+                                element: <ListDevelopers />,
+                                handle: {
+                                    title: 'Developers',
+                                    permissions: ['lists_developers'],
+                                },
+                            }, {
+                                path: 'testing',
+                                element: <ListTesting />,
+                                handle: {
+                                    title: 'Campaigns',
+                                    permissions: ['lists_testing'],
+                                },
+                            }
+                        ]
+                    }
+                ]
+            },
         ],
     }
 ]

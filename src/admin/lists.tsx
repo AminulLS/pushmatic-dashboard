@@ -1,11 +1,11 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
-function Dashboard() {
+function Lists() {
     return (
         <>
             <div className="sidebar">
-                <p>Dashboard</p>
+                <p>Lists</p>
             </div>
 
             <div className="content">
@@ -15,4 +15,4 @@ function Dashboard() {
     )
 }
 
-export default Dashboard
+export default Lists

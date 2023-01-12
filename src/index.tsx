@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom'
-import InvalidHost from './public/InvalidHost'
+import InvalidHost from './public/invalid-host'
 import reportWebVitals from './reportWebVitals'
 import router from './router'
 import { isValidHost } from './services/config'

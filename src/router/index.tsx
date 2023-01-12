@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Blank from '../layouts/Blank'
-import ErrorPage from '../public/ErrorPage'
+import Blank from '../layouts/blank'
+import ErrorPage from '../public/error-page'
 
 import admin from './admin'
 import partner from './partner'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom';
 
-function ListDetails() {
+function Index() {
     const { list_id } = useParams()
 
     return (
@@ -9,4 +9,4 @@ function ListDetails() {
     )
 }
 
-export default ListDetails
+export default Index

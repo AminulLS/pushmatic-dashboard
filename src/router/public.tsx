@@ -1,9 +1,9 @@
-import Login from '../public/Auth'
+import Auth from '../public/auth'
 
 const items = [
     {
         path: '/login',
-        element: <Login />
+        element: <Auth />
     }
 ]
 
