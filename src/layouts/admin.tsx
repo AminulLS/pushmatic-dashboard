@@ -2,11 +2,11 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Dashboard from './dashboard'
 
-function Partner() {
+function Admin() {
     return (
         <Dashboard>
             <div className="sidebar">
-                <p>Partner</p>
+                <p>Dashboard</p>
             </div>
 
             <div className="content">
@@ -16,4 +16,4 @@ function Partner() {
     )
 }
 
-export default Partner
+export default Admin

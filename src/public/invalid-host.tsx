@@ -4,10 +4,9 @@ import { Result } from 'antd'
 function InvalidHost() {
     return (
         <div style={{
-            display: 'flex',
-            justifyContent: 'center',
             height: '100vh',
-            alignItems: 'center'
+            display: 'grid',
+            placeItems: 'center',
         }}>
             <Result
                 status="500"

@@ -1,12 +1,14 @@
-import Dashboard from '../layouts/dashboard'
-import Admin from '../admin/index'
+import Admins from '../admin/admins'
+import Reports from '../admin/reports'
+import AdminLayout from '../layouts/admin'
+import AdminIndex from '../admin/index'
 import ListLayout from '../admin/lists/details'
 import ListsIndex from '../admin/lists/index'
 import Lists from '../admin/lists'
 import ListAds from '../admin/lists/details/ads'
 import ListCampaigns from '../admin/lists/details/campaigns'
 import ListConfiguration from '../admin/lists/details/configuration'
-import ListDetails from '../admin/lists/details/index';
+import ListDetails from '../admin/lists/details/index'
 import ListDevelopers from '../admin/lists/details/developers'
 import ListReports from '../admin/lists/details/reports'
 import ListSegments from '../admin/lists/details/segments'
@@ -14,8 +16,8 @@ import ListUsers from '../admin/lists/details/users'
 
 const items = [
     {
-        path: '/admin',
-        element: <Dashboard />,
+        path: 'admin',
+        element: <AdminLayout />,
         handle: {
             title: 'Dashboard',
             permissions: ['dashboard']
@@ -23,8 +25,9 @@ const items = [
         children: [
             {
                 index: true,
-                element: <Admin />,
+                element: <AdminIndex />,
                 handle: {
+                    title: 'Dashboard',
                     permissions: ['dashboard'],
                 },
             }, {
@@ -37,7 +40,11 @@ const items = [
                 children: [
                     {
                         index: true,
-                        element: <ListsIndex />
+                        element: <ListsIndex />,
+                        handle: {
+                            title: 'Lists',
+                            permissions: ['lists_read'],
+                        },
                     },
                     {
                         path: ':list_id',
@@ -49,7 +56,11 @@ const items = [
                         children: [
                             {
                                 index: true,
-                                element: <ListDetails />
+                                element: <ListDetails />,
+                                handle: {
+                                    title: 'List Details',
+                                    permissions: ['lists_read'],
+                                },
                             }, {
                                 path: 'ads',
                                 element: <ListAds />,
@@ -105,17 +116,17 @@ const items = [
                 ]
             }, {
                 path: 'reports',
-                element: <Dashboard />,
+                element: <Reports />,
                 handle: {
                     title: 'Reports',
                     permissions: ['reports_master']
                 },
             }, {
                 path: 'admins',
-                element: <Dashboard />,
+                element: <Admins />,
                 handle: {
                     title: 'Admins',
-                    permissions: ['admins_read', 'admins_edit', 'admins_delete'],
+                    permissions: ['admins_read'],
                 },
             },
         ]

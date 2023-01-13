@@ -1,26 +1,31 @@
 import React from 'react'
-import { Outlet, useMatches } from 'react-router-dom'
+import { Navigate, useLocation, useMatches } from 'react-router-dom';
+import ErrorPage from '../public/error-page';
+import { useAppSelector } from '../redux/hooks';
+import { hasAccess } from '../services/access';
 
-function Dashboard() {
-    const matches = useMatches();
-    const permissions = matches
+function Dashboard({ children }: any) {
+    const auth = useAppSelector(({ auth }) => auth)
+    const matches = useMatches()
+    const location = useLocation()
+
+    if (!auth.isLoggedIn) {
+        return <Navigate to={`/auth/login?next=${location.pathname}`} />
+    }
+
+    // handle permissions
+    const filteredPerms = matches
         .filter(({ handle }: any) => handle?.permissions)
         .map(({ handle }: any) => handle.permissions)
         .flat()
-    const filteredPerms = Array.from(new Set(permissions));
+    const reqPerms = Array.from(new Set(filteredPerms))
+    const authPerms = Array.from(new Set(auth.permissions))
 
-    console.log(matches, filteredPerms)
-    return (
-        <>
-            <div className="sidebar">
-                <p>Dashboard</p>
-            </div>
+    if (!hasAccess(authPerms, reqPerms)) {
+        return <ErrorPage code={403} title="Unauthorized" subTitle="You don't have access to view this page." />
+    }
 
-            <div className="content">
-                <Outlet />
-            </div>
-        </>
-    )
+    return children
 }
 
 export default Dashboard

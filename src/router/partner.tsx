@@ -1,16 +1,16 @@
-import Index from '../partner/index'
+import PartnerIndex from '../partner/index'
 import Lists from '../partner/lists'
 import ListDetails from '../partner/lists/details/index'
 import ListDevelopers from '../partner/lists/details/developers'
 import ListTesting from '../partner/lists/details/testing'
 import ListIndex from '../partner/lists/index'
 import ListLayout from '../partner/lists/details'
-import Partner from '../layouts/partner'
+import PartnerLayout from '../layouts/partner'
 
 const items = [
     {
         path: 'partner',
-        element: <Partner />,
+        element: <PartnerLayout />,
         handle: {
             title: 'Dashboard',
             permissions: ['dashboard'],
@@ -18,7 +18,7 @@ const items = [
         children: [
             {
                 index: true,
-                element: <Index />,
+                element: <PartnerIndex />,
                 handle: {
                     title: 'Dashboard',
                     permissions: ['dashboard'],
@@ -34,6 +34,10 @@ const items = [
                     {
                         index: true,
                         element: <ListIndex />,
+                        handle: {
+                            title: 'Lists',
+                            permissions: ['lists_read'],
+                        },
                     },
                     {
                         path: ':list_id',
@@ -46,6 +50,10 @@ const items = [
                             {
                                 index: true,
                                 element: <ListDetails />,
+                                handle: {
+                                    title: 'List Details',
+                                    permissions: ['lists_read'],
+                                },
                             }, {
                                 path: 'developers',
                                 element: <ListDevelopers />,

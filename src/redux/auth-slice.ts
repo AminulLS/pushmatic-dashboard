@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AuthProfile } from '../types/admins';
+import { AuthProfile } from '../types/admins'
 
 const initialState: AuthProfile = {
     isLoggedIn: false,
-    name: 'Guest User'
-
+    name: 'Guest',
+    token: localStorage.getItem('admin_token'),
+    permissions: [],
 };
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setProfile: (state, action) => action.payload
+        setAuth: (state, action) => action.payload
     }
 })
 
-export const { setProfile } = authSlice.actions
+export const { setAuth } = authSlice.actions
 export default authSlice.reducer

@@ -1,6 +1,5 @@
-export const getPermissions = async () => {
-    return []
-}
-export const hasAccess = (permission: string): boolean => {
-    return true
+export const hasAccess = (permissions: string[], required: string[]): boolean => {
+    const filtered = required.filter(p => permissions.includes(p))
+
+    return required.length === filtered.length
 }

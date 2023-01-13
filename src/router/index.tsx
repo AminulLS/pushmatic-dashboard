@@ -1,17 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom'
-import Blank from '../layouts/blank'
+import Main from '../layouts/main'
 import ErrorPage from '../public/error-page'
 import admin from './admin'
 import partner from './partner'
 import publik from './public'
 
-const base = [
+const routes = [
     {
         path: '/',
-        element: <Blank />,
+        element: <Main />,
         errorElement: <ErrorPage />,
+        children: [...publik, ...admin, ...partner]
     },
 ]
 
-const routes = createBrowserRouter([...base, ...publik, ...admin, ...partner])
-export default routes
+const router = createBrowserRouter(routes)
+export default router
