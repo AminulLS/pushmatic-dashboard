@@ -27,7 +27,7 @@ function Auth() {
         }}>
             <div>
                 <LoginForm
-                    logo="/logo192.png"
+                    logo={config.icon}
                     title={config.name}
                     subTitle={config.desc}
                     onFinish={async ({ username, password }: any) => {

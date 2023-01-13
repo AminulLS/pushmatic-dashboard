@@ -1,0 +1,41 @@
+.app-branding {
+    padding: 10px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 1.4em;
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.app-content-area {
+    margin: 24px 16px 0;
+}
+
+.app-content-holder {
+    padding: 24px;
+}
+
+.app-main-layout {
+    height: 100vh;
+}
+
+.app-content-footer {
+    text-align: center;
+}
+
+.app-content-header {
+    padding: 0;
+    box-shadow: rgba(223, 223, 223, 0.5) 0 2px 2px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-content-sidebar {
+    box-shadow: rgba(223, 223, 223, 0.5) 2px 0 2px 0;
+}

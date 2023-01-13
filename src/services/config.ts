@@ -9,9 +9,9 @@ export const hosts: HostCollection = {
         name: 'Pushmatic',
         title: 'Pushmatic',
         desc: 'The Pushmatic Dashboard.',
-        favicon: 'http://localhost:3000/storage/img/favicon.ico',
-        logo: 'http://localhost:3000/storage/img/logo.png',
-        icon: 'http://localhost:3000/storage/img/icon.png',
+        favicon: '/favicon.ico',
+        logo: '/logo512.png',
+        icon: '/logo192.png',
     },
     'pushmatic.io': {
         domain: 'pushmatic.io',
@@ -20,9 +20,9 @@ export const hosts: HostCollection = {
         name: 'Pushmatic',
         title: 'Pushmatic',
         desc: 'The Pushmatic Dashboard.',
-        favicon: 'https://pushmatic.io/storage/img/favicon.ico',
-        logo: 'https://pushmatic.io/storage/img/logo.png',
-        icon: 'https://pushmatic.io/storage/img/icon.png',
+        favicon: '/favicon.ico',
+        logo: '/logo512.png',
+        icon: '/logo192.png',
     },
     'push-alerts.io': {
         domain: 'push-alerts.io',
@@ -31,9 +31,9 @@ export const hosts: HostCollection = {
         name: 'Push Alerts',
         title: 'Push Alerts',
         desc: 'The Push Alert Dashboard.',
-        favicon: 'https://push-alerts.io/storage/img/push-alert-favicon.ico',
-        logo: 'https://push-alerts.io/storage/img/push-alert-logo.png',
-        icon: 'https://push-alerts.io/storage/img/push-alert-icon.png',
+        favicon: '/favicon.ico',
+        logo: '/logo512.png',
+        icon: '/logo192.png',
     }
 }
 

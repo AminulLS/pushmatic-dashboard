@@ -1,8 +1,8 @@
-import { ConfigProvider, theme } from 'antd';
 import React from 'react'
-import antdEnUS from 'antd/locale/en_US';
+import { ConfigProvider, theme } from 'antd'
+import antdEnUS from 'antd/locale/en_US'
 import ReactDOM from 'react-dom/client'
-import { Provider } from 'react-redux';
+import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import InvalidHost from './public/invalid-host'
 import reportWebVitals from './reportWebVitals'
@@ -10,7 +10,8 @@ import router from './router'
 import { isValidHost } from './services/config'
 import { store } from './redux/store'
 
-import 'antd/dist/reset.css';
+import 'antd/dist/reset.css'
+import './index.css'
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
