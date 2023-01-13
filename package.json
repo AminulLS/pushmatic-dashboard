@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@ant-design/plots": "^1.2.3",
     "@ant-design/pro-components": "^2.3.52",
     "@reduxjs/toolkit": "^1.9.1",
     "@types/node": "^16.18.11",

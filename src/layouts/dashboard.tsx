@@ -15,7 +15,7 @@ const config = currentHost
 const { Header, Content, Footer, Sider } = Layout
 
 function Dashboard({ menuItems }: any) {
-    const { token: { colorBgContainer }, } = theme.useToken()
+    const { token: { colorBgContainer } } = theme.useToken()
     const auth = useAppSelector(({ auth }) => auth)
     const location = useLocation()
     const navigate = useNavigate()
@@ -75,9 +75,7 @@ function Dashboard({ menuItems }: any) {
                     </div>
                 </Header>
                 <Content className="app-content-area">
-                    <div className="app-content-holder" style={{ background: colorBgContainer }}>
-                        <Outlet />
-                    </div>
+                    <Outlet />
                 </Content>
                 <Footer className="app-content-footer">&copy; {`${(new Date()).getFullYear()} ${config.name}`}</Footer>
             </Layout>

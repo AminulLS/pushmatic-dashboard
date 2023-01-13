@@ -20,6 +20,10 @@
     padding: 24px;
 }
 
+.app-custom-shadow {
+    box-shadow: rgba(223, 223, 223, 0.5) 0 2px 2px 0;
+}
+
 .app-main-layout {
     height: 100vh;
 }
