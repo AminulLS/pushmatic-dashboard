@@ -13,7 +13,7 @@ const items = [
         element: <PartnerLayout />,
         handle: {
             title: 'Dashboard',
-            permissions: ['dashboard'],
+            permissions: ['partner', 'dashboard'],
         },
         children: [
             {

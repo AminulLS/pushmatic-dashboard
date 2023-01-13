@@ -34,6 +34,8 @@ function Dashboard({ menuItems }: any) {
     const reqPerms = Array.from(new Set(filteredPerms))
     const authPerms = Array.from(new Set(auth.permissions))
 
+    authPerms.push(String(auth.role))
+
     if (!hasAccess(authPerms, reqPerms)) {
         return <ErrorPage code={403} title="Unauthorized" subTitle="You don't have access to view this page." />
     }

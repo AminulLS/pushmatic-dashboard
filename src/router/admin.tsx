@@ -20,7 +20,7 @@ const items = [
         element: <AdminLayout />,
         handle: {
             title: 'Dashboard',
-            permissions: ['dashboard']
+            permissions: ['admin', 'dashboard']
         },
         children: [
             {
@@ -28,7 +28,7 @@ const items = [
                 element: <AdminIndex />,
                 handle: {
                     title: 'Dashboard',
-                    permissions: ['dashboard'],
+                    permissions: ['admin', 'dashboard']
                 },
             }, {
                 path: 'lists',
