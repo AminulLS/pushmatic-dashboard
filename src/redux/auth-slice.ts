@@ -1,21 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { AuthProfile } from '../types/admins'
 
-const AUTH_TOKEN_KEY = 'admin_token';
+const AUTH_TOKEN_KEY = 'admin_token'
 
 const initialState: AuthProfile = {
     isLoggedIn: false,
     name: 'Guest',
     token: localStorage.getItem('admin_token'),
     permissions: [],
-};
+}
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         setAuth: (state, action) => {
-            const { token } = action.payload;
+            const { token } = action.payload
 
             if (!token) {
                 return initialState

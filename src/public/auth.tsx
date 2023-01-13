@@ -1,13 +1,13 @@
 import React from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { LoginForm, ProFormText } from '@ant-design/pro-components'
-import { Navigate } from 'react-router-dom';
-import { setAuth } from '../redux/auth-slice';
+import { Navigate } from 'react-router-dom'
+import { setAuth } from '../redux/auth-slice'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { login } from '../services/auth';
+import { login } from '../services/auth'
 import { currentHost } from '../services/config'
 
-const config = currentHost;
+const config = currentHost
 
 function Auth() {
     const auth = useAppSelector(({ auth }) => auth)

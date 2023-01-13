@@ -1,4 +1,4 @@
-import { RouteObject } from 'react-router/dist/lib/context';
+import { RouteObject } from 'react-router/dist/lib/context'
 
 export declare type RouteItemMeta = {
     [name: string]: any
@@ -11,4 +11,4 @@ export declare type RouteItem = RouteObject & {
     permissions?: string[]
 }
 
-export declare type Route = RouteItem[];
+export declare type Route = RouteItem[]

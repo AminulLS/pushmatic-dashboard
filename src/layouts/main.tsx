@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { Spin } from 'antd';
+import { Spin } from 'antd'
 import { Outlet, useMatches } from 'react-router-dom'
-import { setAuth } from '../redux/auth-slice';
+import { setAuth } from '../redux/auth-slice'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { setLoader } from '../redux/loader-slice'
 import { profile } from '../services/auth'
@@ -17,7 +17,7 @@ function Main() {
     // Ensure the page title.
     useEffect(() => {
         const lastMatch: any = matches[matches.length - 1]
-        const title = lastMatch?.handle?.title;
+        const title = lastMatch?.handle?.title
         if (title) {
             document.title = `${title} - ${config.name}`
         } else {

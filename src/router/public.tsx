@@ -1,5 +1,5 @@
 import Auth from '../public/auth'
-import Home from '../public/home';
+import Home from '../public/home'
 
 const items = [
     {

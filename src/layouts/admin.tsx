@@ -1,6 +1,6 @@
 import React from 'react'
-import { DashboardOutlined, FileTextOutlined, GlobalOutlined, UserOutlined } from '@ant-design/icons';
-import Dashboard from './dashboard';
+import { DashboardOutlined, FileTextOutlined, GlobalOutlined, UserOutlined } from '@ant-design/icons'
+import Dashboard from './dashboard'
 
 function Admin() {
     return <Dashboard menuItems={[

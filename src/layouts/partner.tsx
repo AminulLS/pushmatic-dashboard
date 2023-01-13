@@ -1,6 +1,6 @@
 import React from 'react'
-import { DashboardOutlined, GlobalOutlined } from '@ant-design/icons';
-import Dashboard from './dashboard';
+import { DashboardOutlined, GlobalOutlined } from '@ant-design/icons'
+import Dashboard from './dashboard'
 
 function Partner() {
     return <Dashboard menuItems={[

@@ -1,5 +1,5 @@
 import React from 'react'
-import { currentHost } from '../services/config';
+import { currentHost } from '../services/config'
 
 const config = currentHost
 

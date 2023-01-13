@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAppSelector } from '../redux/hooks';
+import { useAppSelector } from '../redux/hooks'
 
 function Index() {
     const auth = useAppSelector(({ auth }) => auth)

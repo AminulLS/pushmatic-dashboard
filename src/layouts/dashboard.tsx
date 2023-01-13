@@ -1,21 +1,21 @@
 import React from 'react'
 import { Navigate, Outlet, useLocation, useMatches, useNavigate } from 'react-router-dom'
-import { Dropdown, Layout, Menu, theme } from 'antd';
+import { Dropdown, Layout, Menu, theme } from 'antd'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
-import AppLogo from '../components/AppLogo';
-import ErrorPage from '../public/error-page';
-import { unsetAuth } from '../redux/auth-slice';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { hasAccess } from '../services/access';
-import { logout } from '../services/auth';
+import AppLogo from '../components/AppLogo'
+import ErrorPage from '../public/error-page'
+import { unsetAuth } from '../redux/auth-slice'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { hasAccess } from '../services/access'
+import { logout } from '../services/auth'
 import { currentHost } from '../services/config'
 
 const config = currentHost
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout
 
 function Dashboard({ menuItems }: any) {
-    const { token: { colorBgContainer }, } = theme.useToken();
+    const { token: { colorBgContainer }, } = theme.useToken()
     const auth = useAppSelector(({ auth }) => auth)
     const location = useLocation()
     const navigate = useNavigate()
