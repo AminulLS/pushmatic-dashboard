@@ -39,7 +39,7 @@ function Index() {
 
 
     return (
-        <ProCard className="app-custom-shadow" split="vertical">
+        <ProCard split="vertical">
             <StatisticCard colSpan={6} title="Today's Activities" loading={isLoading}>
                 <Statistic value={stats.currentDay.subscribed ?? 0} title="Subscribed" layout="horizontal" />
                 <Statistic value={(stats.currentDay.unsubscribed ?? 0)} title="Unsubscribed" layout="horizontal" />

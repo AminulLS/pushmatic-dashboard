@@ -185,7 +185,6 @@ function Admins() {
             </Modal>
 
             <ProTable
-                className="app-custom-shadow"
                 actionRef={adminIndexTable}
                 headerTitle="Admins"
                 scroll={{ x: 1000 }}
