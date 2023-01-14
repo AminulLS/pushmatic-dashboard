@@ -3,11 +3,10 @@ import dayjs from 'dayjs'
 import { Card, Button, message } from 'antd'
 import { ReloadOutlined } from '@ant-design/icons'
 import { ProTable } from '@ant-design/pro-components'
+import type { ProColumns } from '@ant-design/pro-components'
 import { DualAxes } from '@ant-design/plots'
 import { useApiClient } from '../hooks/api'
 import reportColumns from '../components/report-columns'
-
-import type { ProColumns } from '@ant-design/pro-components'
 
 function mapChartData(data: any) {
     return data.map((item: any) => {
@@ -32,7 +31,6 @@ function Reports() {
             fixed: 'right',
             align: 'center',
             render: (_, record) => (<Button
-                size="small"
                 shape="circle"
                 icon={<ReloadOutlined />}
                 onClick={(e: any) => {
@@ -76,7 +74,6 @@ function Reports() {
             <ProTable
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={[...reportColumns.summary, ...actions]}
                 request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
@@ -119,7 +116,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.ad}
                 search={{ filterType: 'light' }}
                 request={(params) => {
@@ -141,7 +137,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.source}
                 search={{ filterType: 'light' }}
                 request={(params) => {
@@ -163,7 +158,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.optin}
                 search={{ filterType: 'light' }}
                 request={(params) => {
@@ -185,7 +179,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.device}
                 search={{ filterType: 'light' }}
                 request={(params) => {
@@ -207,7 +200,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.os}
                 search={{ filterType: 'light' }}
                 request={(params) => {
@@ -229,7 +221,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.browser}
                 search={{ filterType: 'light' }}
                 request={(params) => {
@@ -251,7 +242,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.provider}
                 search={{ filterType: 'light' }}
                 request={(params) => {
@@ -273,7 +263,6 @@ function Reports() {
                 style={{ marginTop: '20px' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
-                defaultSize="small"
                 columns={reportColumns.hourly}
                 search={{ filterType: 'light' }}
                 request={(params) => {

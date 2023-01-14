@@ -27,7 +27,6 @@ function Auth() {
         }}>
             <div>
                 <LoginForm
-                    logo={config.icon}
                     title={config.name}
                     subTitle={config.desc}
                     onFinish={async ({ username, password }: any) => {
@@ -41,7 +40,6 @@ function Auth() {
                         name="username"
                         placeholder="Your email..."
                         fieldProps={{
-                            size: 'large',
                             prefix: <UserOutlined className={'prefixIcon'} />,
                         }}
                         rules={[{ required: true, type: 'email' }]}
@@ -50,7 +48,6 @@ function Auth() {
                         name="password"
                         placeholder="Your password..."
                         fieldProps={{
-                            size: 'large',
                             prefix: <LockOutlined className={'prefixIcon'} />,
                         }}
                         rules={[{ required: true }]}

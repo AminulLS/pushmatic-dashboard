@@ -154,7 +154,6 @@ function Ads() {
                 return (
                     <Space>
                         <Button
-                            size="small"
                             shape="circle"
                             icon={<EditOutlined />}
                             onClick={() => handleModal(record)}
@@ -169,7 +168,6 @@ function Ads() {
                         >
                             <Button
                                 danger={true}
-                                size="small"
                                 shape="circle"
                                 icon={<DeleteOutlined />}
                             />
@@ -209,7 +207,6 @@ function Ads() {
 
                     return apiClient(`/ads?${qs.toString()}`).then(({ data }) => data)
                 }}
-                defaultSize="small"
                 rowKey="_id"
                 search={{ filterType: 'light' }}
                 headerTitle="Ads"
@@ -257,7 +254,7 @@ function Ads() {
                     <Form.Item
                         name="content"
                         label="Content"
-                        extra={(<small>Availble Tags: {adTags.join(', ')}</small>)}
+                        extra={(<small>Available Tags: {adTags.join(', ')}</small>)}
                         rules={[{ required: true }]}
                     >
                         <Input.TextArea placeholder="Ad Content" />

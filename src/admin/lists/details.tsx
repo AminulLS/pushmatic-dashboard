@@ -70,7 +70,10 @@ function Details() {
         apiClient
             .get(`/lists/${list_id}`)
             .then(({ data }) => {
-                dispatch(setStateList({ [data.data._id]: data.data }))
+                dispatch(setStateList({
+                    current: data.data,
+                    [data.data._id]: data.data
+                }))
                 setStatus('loaded')
             })
             .catch((err) => setStatus(err.message))

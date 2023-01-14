@@ -2,7 +2,8 @@ import React, { useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { Button, Dropdown, Form, Input, message, Modal, Space, Tag } from 'antd'
-import { ProColumns, ProTable } from '@ant-design/pro-components'
+import { ProTable } from '@ant-design/pro-components'
+import type { ProColumns } from '@ant-design/pro-components'
 import { EyeOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons'
 import { useApiClient } from '../../hooks/api'
 import { ListItem } from '../../types/lists'
@@ -71,7 +72,6 @@ function Index() {
             width: 75,
             fixed: 'right',
             render: (_, record) => (<Dropdown.Button
-                size="small"
                 onClick={() => navigate(`${record._id}`)}
                 menu={{
                     items: [{
@@ -153,7 +153,6 @@ function Index() {
                 headerTitle="Lists"
                 scroll={{ x: 1000 }}
                 columns={columns}
-                defaultSize="small"
                 rowKey="_id"
                 request={async (params) => {
                     const { data } = await apiClient.get(`/lists`, { params });

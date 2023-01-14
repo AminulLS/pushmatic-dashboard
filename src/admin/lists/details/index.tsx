@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { TinyArea } from '@ant-design/plots'
 import { ProCard, Statistic, StatisticCard } from '@ant-design/pro-components'
 import { useApiClient } from '../../../hooks/api';
@@ -15,8 +14,7 @@ const defaultStats = {
 }
 
 function Index() {
-    const { list_id } = useParams<{ [name: string]: any }>()
-    const list = useAppSelector<ListItem>(({ list }) => list[list_id])
+    const list = useAppSelector<ListItem>(({ list }) => list.current)
     const apiClient = useApiClient()
     const [stats, setStats] = useState({
         current: [defaultStats],

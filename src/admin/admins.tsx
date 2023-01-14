@@ -2,10 +2,9 @@ import React, { useRef, useState } from 'react'
 import { Button, Form, Tag, Select, Modal, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import { ProTable } from '@ant-design/pro-components'
+import type { ProColumns } from '@ant-design/pro-components'
 import { EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { useApiClient } from '../hooks/api'
-
-import type { ProColumns } from '@ant-design/pro-components'
 import type { AdminItem } from '../types/admins'
 
 function Admins() {
@@ -81,7 +80,6 @@ function Admins() {
             width: 75,
             fixed: 'right',
             render: (_, record) => (<Button
-                size="small"
                 onClick={() => {
                     setEditAdmin({
                         _id: record._id,
@@ -189,7 +187,6 @@ function Admins() {
                 headerTitle="Admins"
                 scroll={{ x: 1000 }}
                 columns={columns}
-                defaultSize="small"
                 rowKey="_id"
                 request={async (params) => {
                     const { data } = await apiClient.get('admins', { params })
