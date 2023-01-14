@@ -3,13 +3,13 @@ import { ListStates } from '../types/lists';
 
 const initialState: ListStates = {}
 
-const loaderSlice = createSlice({
-    name: 'loader',
+const listReducer = createSlice({
+    name: 'list',
     initialState,
     reducers: {
         setStateList: (state, action) => ({ ...state, ...action.payload })
     }
 })
 
-export const { setStateList } = loaderSlice.actions
-export default loaderSlice.reducer
+export const { setStateList } = listReducer.actions
+export default listReducer.reducer
