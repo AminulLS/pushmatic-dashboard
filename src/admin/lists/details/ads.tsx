@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
-import { useParams } from 'react-router-dom'
-import { Button, Space, Popconfirm, message, Form, Modal, Input, Select, InputNumber, Radio, Image, Alert } from 'antd'
+import {
+    Button, Space, Popconfirm, message, Form, Modal,
+    Input, Select, InputNumber, Radio, Image, Alert
+} from 'antd'
 import { ProTable } from '@ant-design/pro-components'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import type { ProColumns } from '@ant-design/pro-components'
 import { useApiClient } from '../../../hooks/api'
 import { useAdImages, useAdTags, useProviders } from '../../../hooks/cache'
 import { useProfileFields, useIconTypes } from '../../../hooks/tags'
+import { useAppSelector } from '../../../redux/hooks'
 import { AdItem } from '../../../types/ads'
+import { ListItem } from '../../../types/lists'
 
 function Ads() {
-    const { list_id } = useParams<{ [name: string]: any }>()
+    const list = useAppSelector<ListItem>(({ list }) => list.current)
     const apiClient = useApiClient()
     const providers = useProviders()
     const adTags = useAdTags()
@@ -53,7 +57,7 @@ function Ads() {
         let msgOk = 'Ad updated successfully'
 
         if (!id) {
-            fields.list_id = list_id
+            fields.list_id = list._id
             msgOk = 'Ad created successfully'
         } else {
             endpoint = `/ads/${id}`
@@ -191,7 +195,6 @@ function Ads() {
         } catch (_) {
             setAdLinkPreview('')
         }
-
     }, [adLink, adLinkParams])
 
     return (
@@ -201,7 +204,7 @@ function Ads() {
                 scroll={{ x: 1000 }}
                 columns={columns}
                 request={(params) => {
-                    params.list_id = list_id
+                    params.list_id = list._id
 
                     const qs = new URLSearchParams(params)
 

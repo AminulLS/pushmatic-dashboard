@@ -39,7 +39,7 @@ function Index() {
             }).finally(() => setIsLoading(false))
 
         // eslint-disable-next-line
-    }, [])
+    }, [list])
 
     return (
         <ProCard split="vertical">
