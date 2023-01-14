@@ -1,5 +1,5 @@
 import { HostCollection, HostItem } from '../types/hosts'
-import cleanHost from '../utils/cleanHost'
+import cleanHost from '../utils/clean-host'
 
 export const hosts: HostCollection = {
     'localhost:3000': {

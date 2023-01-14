@@ -4,24 +4,16 @@ import { Card, Button, message } from 'antd'
 import { ReloadOutlined } from '@ant-design/icons'
 import { ProTable } from '@ant-design/pro-components'
 import type { ProColumns } from '@ant-design/pro-components'
-import { DualAxes } from '@ant-design/plots'
+import { DualAxes, Line } from '@ant-design/plots'
 import { useApiClient } from '../hooks/api'
 import reportColumns from '../components/report-columns'
-
-function mapChartData(data: any) {
-    return data.map((item: any) => {
-        return {
-            Date: dayjs(item.date).format('MMM DD, YY'),
-            Revenue: item.revenue ?? 0,
-            Clicks: item.clicks ?? 0,
-        };
-    });
-}
+import { mapDualAxis, mapHourlyLine } from '../utils/chart-mapper'
 
 function Reports() {
     const apiClient = useApiClient()
-    const [stats, setStats] = useState([]);
-    const [activeKey, setActiveKey] = useState<string>('summary');
+    const [stats, setStats] = useState<[]>([]);
+    const [hourlyStats, setHourlyStats] = useState<[]>([]);
+    const [activeKey, setActiveKey] = useState<'summary' | 'welcome' | 'regular'>('summary')
 
     const actions: ProColumns[] = [
         {
@@ -65,7 +57,7 @@ function Reports() {
         <>
             <Card style={{ marginBottom: '20px' }}>
                 <DualAxes
-                    data={[mapChartData(stats.slice().reverse()), mapChartData(stats.slice().reverse())]}
+                    data={[mapDualAxis(stats).reverse(), mapDualAxis(stats).reverse()]}
                     xField="Date"
                     yField={['Revenue', 'Clicks']}
                     height={250}
@@ -74,7 +66,7 @@ function Reports() {
             <ProTable
                 bordered={true}
                 scroll={{ x: 1000 }}
-                columns={[...reportColumns.summary, ...actions]}
+                columns={[...reportColumns[activeKey], ...actions]}
                 request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
@@ -258,6 +250,16 @@ function Reports() {
                 }}
             />
 
+            <Card style={{ margin: '20px 0' }}>
+                <Line
+                    data={mapHourlyLine(hourlyStats).reverse()}
+                    xField="time"
+                    yField="value"
+                    seriesField="type"
+                    height={150}
+                />
+            </Card>
+
             <ProTable
                 headerTitle="Hourly Report"
                 style={{ marginTop: '20px' }}
@@ -270,7 +272,11 @@ function Reports() {
 
                     return apiClient
                         .get(`/reports/daily-by-hour?${qs}`)
-                        .then(({ data }) => data)
+                        .then(({ data }) => {
+                            setHourlyStats(data.data)
+
+                            return data
+                        })
                 }}
                 rowKey="_id"
                 columnsState={{
