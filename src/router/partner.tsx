@@ -1,3 +1,5 @@
+import type { RouteObject } from 'react-router-dom'
+
 import PartnerIndex from '../partner/index'
 import ListsLayout from '../partner/lists-layout'
 import ListDetails from '../partner/lists/details/index'
@@ -7,7 +9,7 @@ import ListIndex from '../partner/lists/index'
 import ListDetailsLayout from '../partner/lists/details'
 import PartnerLayout from '../layouts/partner'
 
-const items = [
+const items: RouteObject[] = [
     {
         path: 'partner',
         element: <PartnerLayout />,

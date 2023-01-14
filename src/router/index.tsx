@@ -1,11 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom'
+import type { RouteObject } from 'react-router-dom'
+
 import Main from '../layouts/main'
 import ErrorPage from '../public/error-page'
 import admin from './admin'
 import partner from './partner'
+
 import publik from './public'
 
-const routes = [
+const routes: RouteObject[] = [
     {
         path: '/',
         element: <Main />,

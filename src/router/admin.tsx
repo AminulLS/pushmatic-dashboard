@@ -1,3 +1,5 @@
+import type { RouteObject } from 'react-router-dom'
+
 import Admins from '../admin/admins'
 import Reports from '../admin/reports'
 import AdminLayout from '../layouts/admin'
@@ -14,7 +16,7 @@ import ListReports from '../admin/lists/details/reports'
 import ListSegments from '../admin/lists/details/segments'
 import ListUsers from '../admin/lists/details/users'
 
-const items = [
+const items: RouteObject[] = [
     {
         path: 'admin',
         element: <AdminLayout />,
