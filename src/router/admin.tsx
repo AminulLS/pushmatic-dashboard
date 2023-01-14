@@ -10,6 +10,7 @@ import ListsLayout from '../admin/lists-layout'
 import ListAds from '../admin/lists/details/ads'
 import ListCampaigns from '../admin/lists/details/campaigns'
 import ListConfiguration from '../admin/lists/details/configuration'
+import ListFunnels from '../admin/lists/details/funnels'
 import ListDetails from '../admin/lists/details/index'
 import ListDevelopers from '../admin/lists/details/developers'
 import ListReports from '../admin/lists/details/reports'
@@ -32,7 +33,8 @@ const items: RouteObject[] = [
                     title: 'Dashboard',
                     permissions: ['admin', 'dashboard']
                 },
-            }, {
+            },
+            {
                 path: 'lists',
                 element: <ListsLayout />,
                 handle: {
@@ -63,49 +65,64 @@ const items: RouteObject[] = [
                                     title: 'List Details',
                                     permissions: ['lists_read'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'ads',
                                 element: <ListAds />,
                                 handle: {
                                     title: 'Ads',
                                     permissions: ['ads_read'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'campaigns',
                                 element: <ListCampaigns />,
                                 handle: {
                                     title: 'Campaigns',
                                     permissions: ['campaigns_read'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'configuration',
                                 element: <ListConfiguration />,
                                 handle: {
                                     title: 'Configuration',
                                     permissions: ['lists_configuration'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'developers',
                                 element: <ListDevelopers />,
                                 handle: {
                                     title: 'Developers',
                                     permissions: ['lists_developers'],
                                 },
-                            }, {
+                            },
+                            {
+                                path: 'funnels',
+                                element: <ListFunnels />,
+                                handle: {
+                                    title: 'Funnels',
+                                    permissions: ['funnels_read'],
+                                },
+                            },
+                            {
                                 path: 'reports',
                                 element: <ListReports />,
                                 handle: {
                                     title: 'Reports',
                                     permissions: ['lists_reports'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'segments',
                                 element: <ListSegments />,
                                 handle: {
                                     title: 'Segments',
                                     permissions: ['lists_segments'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'users',
                                 element: <ListUsers />,
                                 handle: {
@@ -116,14 +133,16 @@ const items: RouteObject[] = [
                         ]
                     },
                 ]
-            }, {
+            },
+            {
                 path: 'reports',
                 element: <Reports />,
                 handle: {
                     title: 'Reports',
                     permissions: ['reports_master']
                 },
-            }, {
+            },
+            {
                 path: 'admins',
                 element: <Admins />,
                 handle: {

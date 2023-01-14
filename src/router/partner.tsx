@@ -25,7 +25,8 @@ const items: RouteObject[] = [
                     title: 'Dashboard',
                     permissions: ['dashboard'],
                 },
-            }, {
+            },
+            {
                 path: 'lists',
                 element: <ListsLayout />,
                 handle: {
@@ -56,14 +57,16 @@ const items: RouteObject[] = [
                                     title: 'List Details',
                                     permissions: ['lists_read'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'developers',
                                 element: <ListDevelopers />,
                                 handle: {
                                     title: 'Developers',
                                     permissions: ['lists_developers'],
                                 },
-                            }, {
+                            },
+                            {
                                 path: 'testing',
                                 element: <ListTesting />,
                                 handle: {

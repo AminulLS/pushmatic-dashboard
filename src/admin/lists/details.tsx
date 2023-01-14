@@ -3,13 +3,8 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Menu, Result, Spin } from 'antd'
 import type { MenuProps } from 'antd'
 import {
-    AppstoreOutlined,
-    CalendarOutlined,
-    ClusterOutlined,
-    FilePdfOutlined,
-    FileTextOutlined,
-    SettingOutlined,
-    UserOutlined
+    AppstoreOutlined, CalendarOutlined, ClusterOutlined, FilePdfOutlined,
+    FileTextOutlined, RadarChartOutlined, SettingOutlined, UserOutlined
 } from '@ant-design/icons';
 import { useApiClient } from '../../hooks/api'
 import { useAppDispatch } from '../../redux/hooks'
@@ -43,6 +38,11 @@ function Details() {
             key: `/admin/lists/${list_id}/campaigns`,
             label: 'Campaigns',
             icon: <CalendarOutlined />,
+        },
+        {
+            key: `/admin/lists/${list_id}/funnels`,
+            label: 'Funnels',
+            icon: <RadarChartOutlined />,
         },
         {
             key: `/admin/lists/${list_id}/users`,
