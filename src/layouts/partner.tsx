@@ -2,7 +2,7 @@ import React from 'react'
 import { DashboardOutlined, GlobalOutlined } from '@ant-design/icons'
 import Dashboard from './dashboard'
 
-import type { MenuProps } from 'antd';
+import type { MenuProps } from 'antd'
 
 function Partner() {
     const items: MenuProps['items'] = [

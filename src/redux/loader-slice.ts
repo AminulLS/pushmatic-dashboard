@@ -6,7 +6,7 @@ const loaderSlice = createSlice({
         booted: false
     },
     reducers: {
-        setLoader: (state, action) => action.payload
+        setLoader: (state, action) => ({ ...state, ...action.payload })
     }
 })
 
