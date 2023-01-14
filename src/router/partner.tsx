@@ -1,10 +1,10 @@
 import PartnerIndex from '../partner/index'
-import Lists from '../partner/lists'
+import ListsLayout from '../partner/lists-layout'
 import ListDetails from '../partner/lists/details/index'
 import ListDevelopers from '../partner/lists/details/developers'
 import ListTesting from '../partner/lists/details/testing'
 import ListIndex from '../partner/lists/index'
-import ListLayout from '../partner/lists/details'
+import ListDetailsLayout from '../partner/lists/details'
 import PartnerLayout from '../layouts/partner'
 
 const items = [
@@ -25,7 +25,7 @@ const items = [
                 },
             }, {
                 path: 'lists',
-                element: <Lists />,
+                element: <ListsLayout />,
                 handle: {
                     title: 'Lists',
                     permissions: ['lists_read'],
@@ -41,7 +41,7 @@ const items = [
                     },
                     {
                         path: ':list_id',
-                        element: <ListLayout />,
+                        element: <ListDetailsLayout />,
                         handle: {
                             title: 'List Details',
                             permissions: ['lists_read'],

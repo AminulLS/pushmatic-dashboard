@@ -33,8 +33,6 @@ function Auth() {
                     onFinish={async ({ username, password }: any) => {
                         const { profile } = await login(username, password)
 
-                        localStorage.setItem('admin_token', profile.token)
-
                         dispatch(setAuth(profile))
                     }}
                     onFinishFailed={(values) => console.log(values)}

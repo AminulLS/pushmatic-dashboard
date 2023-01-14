@@ -2,9 +2,9 @@ import Admins from '../admin/admins'
 import Reports from '../admin/reports'
 import AdminLayout from '../layouts/admin'
 import AdminIndex from '../admin/index'
-import ListLayout from '../admin/lists/details'
+import ListDetailsLayout from '../admin/lists/details'
 import ListsIndex from '../admin/lists/index'
-import Lists from '../admin/lists'
+import ListsLayout from '../admin/lists-layout'
 import ListAds from '../admin/lists/details/ads'
 import ListCampaigns from '../admin/lists/details/campaigns'
 import ListConfiguration from '../admin/lists/details/configuration'
@@ -32,7 +32,7 @@ const items = [
                 },
             }, {
                 path: 'lists',
-                element: <Lists />,
+                element: <ListsLayout />,
                 handle: {
                     title: 'Lists',
                     permissions: ['lists_read'],
@@ -48,7 +48,7 @@ const items = [
                     },
                     {
                         path: ':list_id',
-                        element: <ListLayout />,
+                        element: <ListDetailsLayout />,
                         handle: {
                             title: 'List Details',
                             permissions: ['lists_read'],

@@ -2,11 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import { AuthProfile } from '../types/admins'
 
 const AUTH_TOKEN_KEY = 'admin_token'
+const currentToken = localStorage.getItem('admin_token');
 
 const initialState: AuthProfile = {
     isLoggedIn: false,
     name: 'Guest',
-    token: localStorage.getItem('admin_token'),
+    token: currentToken,
     permissions: [],
 }
 
