@@ -78,13 +78,16 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 defaultSize="small"
                 columns={[...reportColumns.summary, ...actions]}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily?${qs}`)
 
-                    setStats(data.data)
+                    return apiClient
+                        .get(`/reports/daily?${qs}`)
+                        .then(({ data }) => {
+                            setStats(data.data)
 
-                    return data
+                            return data
+                        })
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -119,11 +122,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.ad}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily-by-ad?${qs}`)
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-ad?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -140,11 +144,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.source}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily-by-source?${qs}`)
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-source?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -161,11 +166,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.optin}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily-by-optin?${qs}`)
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-optin?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -182,11 +188,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.device}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily-by-device?${qs}`)
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-device?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -203,10 +210,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.os}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
-                    const { data } = await apiClient.get(`/reports/daily-by-os`, { params })
+                request={(params) => {
+                    const qs = (new URLSearchParams(params)).toString()
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-os?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -223,11 +232,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.browser}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily-by-browser?${qs}`);
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-browser?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -244,11 +254,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.provider}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily-by-provider?${qs}`)
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-provider?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
@@ -265,11 +276,12 @@ function Reports() {
                 defaultSize="small"
                 columns={reportColumns.hourly}
                 search={{ filterType: 'light' }}
-                request={async (params) => {
+                request={(params) => {
                     const qs = (new URLSearchParams(params)).toString()
-                    const { data } = await apiClient.get(`/reports/daily-by-hour?${qs}`)
 
-                    return data
+                    return apiClient
+                        .get(`/reports/daily-by-hour?${qs}`)
+                        .then(({ data }) => data)
                 }}
                 rowKey="_id"
                 columnsState={{
