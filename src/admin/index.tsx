@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { TinyArea } from '@ant-design/plots';
-import { ProCard, StatisticCard, Statistic } from '@ant-design/pro-components';
+import { TinyArea } from '@ant-design/plots'
+import { ProCard, StatisticCard, Statistic } from '@ant-design/pro-components'
 import { useApiClient } from '../hooks/api'
 
 const defaultStats = {

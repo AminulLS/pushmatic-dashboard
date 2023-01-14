@@ -17,20 +17,20 @@ function Admins() {
     const [editAdmin, setEditAdmin] = useState<AdminItem>({})
 
     const handleAdminForm = (params: AdminItem) => {
-        setLoading(true);
-        const endpoint = editAdmin?._id ? `/admins/${editAdmin._id}` : '/admins';
+        setLoading(true)
+        const endpoint = editAdmin?._id ? `/admins/${editAdmin._id}` : '/admins'
 
         apiClient.post(endpoint, params)
             .then(({ data }) => {
-                message.success(data?.message ?? 'Admin data is recorded.');
-                setAddModalVisible(false);
-                adminForm.resetFields();
-                adminIndexTable.current.reloadAndRest();
-                setEditAdmin({});
+                message.success(data?.message ?? 'Admin data is recorded.')
+                setAddModalVisible(false)
+                adminForm.resetFields()
+                adminIndexTable.current.reloadAndRest()
+                setEditAdmin({})
             })
             .catch(err => message.error(err.message))
-            .finally(() => setLoading(false));
-    };
+            .finally(() => setLoading(false))
+    }
 
     const columns: ProColumns<AdminItem>[] = [
         {
@@ -89,9 +89,9 @@ function Admins() {
                         email: record.email,
                         role: record.role,
                         status: record.status,
-                    });
+                    })
 
-                    setAddModalVisible(true);
+                    setAddModalVisible(true)
                 }}
             >
                 <EditOutlined />
@@ -108,9 +108,9 @@ function Admins() {
                 destroyOnClose={true}
                 onOk={() => adminForm.submit()}
                 onCancel={() => {
-                    adminForm.resetFields();
-                    setAddModalVisible(false);
-                    setEditAdmin({});
+                    adminForm.resetFields()
+                    setAddModalVisible(false)
+                    setEditAdmin({})
                 }}
             >
                 <Form
@@ -193,7 +193,7 @@ function Admins() {
                 defaultSize="small"
                 rowKey="_id"
                 request={async (params) => {
-                    const { data } = await apiClient.get('admins', { params });
+                    const { data } = await apiClient.get('admins', { params })
 
                     return data
                 }}

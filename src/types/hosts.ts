@@ -1,4 +1,4 @@
-export type Host = {
+export interface Host {
     domain: string
     cdn: string
     api: string
@@ -10,6 +10,8 @@ export type Host = {
     icon: string
 }
 
+export type HostItem = Host
+
 export type HostCollection = {
-    [name: string]: Host
+    [name: string]: HostItem
 }

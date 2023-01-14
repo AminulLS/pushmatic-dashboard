@@ -1,4 +1,4 @@
-import { Host, HostCollection } from '../types/hosts'
+import { HostCollection, HostItem } from '../types/hosts'
 import cleanHost from '../utils/cleanHost'
 
 export const hosts: HostCollection = {
@@ -37,7 +37,7 @@ export const hosts: HostCollection = {
     }
 }
 
-export const getHostConfig = (host: string): Host => {
+export const getHostConfig = (host: string): HostItem => {
     const key = cleanHost(host)
 
     return hosts[key]
