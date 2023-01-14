@@ -2,8 +2,10 @@ import React from 'react'
 import { DashboardOutlined, FileTextOutlined, GlobalOutlined, UserOutlined } from '@ant-design/icons'
 import Dashboard from './dashboard'
 
+import type { MenuProps } from 'antd';
+
 function Admin() {
-    return <Dashboard menuItems={[
+    const items: MenuProps['items'] = [
         {
             key: '/admin',
             label: 'Dashboard',
@@ -24,7 +26,9 @@ function Admin() {
             label: 'Admins',
             icon: <UserOutlined />,
         },
-    ]} />
+    ]
+
+    return <Dashboard menuItems={items} />
 }
 
 export default Admin
