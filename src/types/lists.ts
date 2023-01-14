@@ -32,3 +32,7 @@ export interface List {
 }
 
 export type ListItem = List
+
+export type ListStates = {
+    [name: string]: List
+}
