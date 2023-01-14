@@ -1,4 +1,4 @@
-export declare interface Admin {
+export interface Admin {
     _id?: string
     name?: string
     email?: string
@@ -9,9 +9,9 @@ export declare interface Admin {
     updated_at?: string
 }
 
-export declare type AdminItem = Admin
+export type AdminItem = Admin
 
-export declare type AuthProfile = {
+export type AuthProfile = {
     id?: string
     isLoggedIn?: boolean
     token?: string | undefined | null

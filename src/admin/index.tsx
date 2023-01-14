@@ -33,6 +33,8 @@ function Index() {
                     previous: (data.previous ?? []).reverse(),
                 })
             }).finally(() => setIsLoading(false))
+
+        // eslint-disable-next-line
     }, [])
 
 

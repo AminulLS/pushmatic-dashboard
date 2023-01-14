@@ -1,4 +1,4 @@
-export declare type Host = {
+export type Host = {
     domain: string
     cdn: string
     api: string
@@ -10,6 +10,6 @@ export declare type Host = {
     icon: string
 }
 
-export declare type HostCollection = {
+export type HostCollection = {
     [name: string]: Host
 }
