@@ -111,11 +111,11 @@ function Ads() {
             width: 200,
             renderText: (_, record) => {
                 let txt = record.ad_type
-                const campaigns: any = providers?.omxml?.campaigns
+                const campaigns = providers?.omxml?.campaigns
 
                 if (txt === 'omxml') {
-                    const incl = record.config?.campaign_ids?.map(k => campaigns[k])
-                    const excl = record.config?.exclude_campaign_ids?.map(k => campaigns[k])
+                    const incl = record.config?.campaign_ids?.map(k => (campaigns ? campaigns[k]?.label : k))
+                    const excl = record.config?.exclude_campaign_ids?.map(k => (campaigns ? campaigns[k]?.label : k))
 
                     if (incl && incl.length > 0) {
                         txt += ` - Inc: ` + incl.join(', ')
