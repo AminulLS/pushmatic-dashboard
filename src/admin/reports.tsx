@@ -41,12 +41,12 @@ function Reports() {
                             content: data.message,
                             key: `${record._id}`,
                         })
-                    }).catch((res) => {
+                    }).catch(err => {
                         message.error({
-                            content: res?.data?.message ?? res.statusText,
+                            content: (err?.response?.data?.message ?? err?.response?.statusText) ?? err.message,
                             key: `${record._id}`,
                         })
-                    }).catch(() => {
+                    }).finally(() => {
                         e.nativeEvent.target.disabled = false
                     })
                 }}

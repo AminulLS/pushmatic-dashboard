@@ -55,7 +55,7 @@ function Reports() {
                                     })
                                     .catch((err) => {
                                         message.error({
-                                            content: err?.data?.message ?? err.statusText,
+                                            content: (err?.response?.data?.message ?? err?.response?.statusText) ?? err.message,
                                             key
                                         })
                                     })

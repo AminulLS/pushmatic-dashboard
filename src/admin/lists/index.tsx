@@ -98,7 +98,7 @@ function Index() {
                 listForm.resetFields()
                 listIndexTable.current.reloadAndRest()
             })
-            .catch(err => message.error(err?.data?.message ?? err?.statusText))
+            .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
             .finally(() => setLoading(false))
     }
 

@@ -68,7 +68,7 @@ function Segments() {
                                         message.success(data.message ?? 'Segment deleted successfully')
                                         segmentsTable.current.reloadAndRest()
                                     })
-                                    .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? 'Unable to delete the segment.'))
+                                    .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
                             }}
                         >
                             <Button

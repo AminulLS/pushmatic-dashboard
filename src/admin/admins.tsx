@@ -24,13 +24,13 @@ function Admins() {
 
         apiClient.post(endpoint, params)
             .then(({ data }) => {
-                message.success(data?.message ?? 'Admin data is recorded.')
+                message.success(data.message)
                 setAddModalVisible(false)
                 adminForm.resetFields()
                 adminIndexTable.current.reloadAndRest()
                 setEditAdmin({})
             })
-            .catch(err => message.error((err.response?.data?.message ?? err.response?.statusText) ?? 'Unable to save the admin.'))
+            .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
             .finally(() => setLoading(false))
     }
 

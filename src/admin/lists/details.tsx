@@ -76,7 +76,7 @@ function Details() {
                 }))
                 setStatus('loaded')
             })
-            .catch((err) => setStatus(err.message))
+            .catch((err) => setStatus((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
 
         // eslint-disable-next-line
     }, [list_id])

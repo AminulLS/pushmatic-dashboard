@@ -71,7 +71,7 @@ function Ads() {
                 setModalAd({})
                 adsTable.current.reloadAndRest()
             })
-            .catch(err => message.error(err?.data?.message ?? err.statusText))
+            .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
             .finally(() => setIsLoading(false))
     }
 
