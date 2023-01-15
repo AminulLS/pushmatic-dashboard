@@ -1,4 +1,4 @@
-import { HostCollection, HostItem } from '../types/hosts'
+import type { HostCollection, HostItem } from '../types/hosts'
 import cleanHost from '../utils/clean-host'
 
 export const hosts: HostCollection = {

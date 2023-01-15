@@ -6,7 +6,7 @@ import { ProTable } from '@ant-design/pro-components'
 import type { ProColumns } from '@ant-design/pro-components'
 import { EyeOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons'
 import { useApiClient } from '../../hooks/api'
-import { ListItem } from '../../types/lists'
+import type { ListItem } from '../../types/lists'
 
 function Index() {
     const apiClient = useApiClient()
@@ -85,20 +85,20 @@ function Index() {
                 <EyeOutlined />
             </Dropdown.Button>),
         },
-    ];
+    ]
 
     const createNewList = (params: any) => {
-        setLoading(true);
+        setLoading(true)
 
         apiClient.post('/lists', params)
             .then(({ data }) => {
-                message.success(data.message ?? 'New list has been created');
-                setAddModalVisible(false);
-                listForm.resetFields();
-                listIndexTable.current.reloadAndRest();
+                message.success(data.message ?? 'New list has been created')
+                setAddModalVisible(false)
+                listForm.resetFields()
+                listIndexTable.current.reloadAndRest()
             })
             .catch(err => message.error(err?.data?.message ?? err?.statusText))
-            .finally(() => setLoading(false));
+            .finally(() => setLoading(false))
     }
 
     return (
@@ -112,7 +112,7 @@ function Index() {
                 }}
                 onOk={() => listForm.submit()}
                 onCancel={() => {
-                    listForm.resetFields();
+                    listForm.resetFields()
                     setAddModalVisible(false)
                 }}
             >
@@ -155,9 +155,9 @@ function Index() {
                 columns={columns}
                 rowKey="_id"
                 request={async (params) => {
-                    const { data } = await apiClient.get(`/lists`, { params });
+                    const { data } = await apiClient.get(`/lists`, { params })
 
-                    return data;
+                    return data
                 }}
                 search={{ filterType: 'light' }}
                 columnsState={{
@@ -173,7 +173,7 @@ function Index() {
                 ]}
             />
         </>
-    );
+    )
 }
 
 export default Index

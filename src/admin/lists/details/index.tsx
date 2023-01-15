@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { TinyArea } from '@ant-design/plots'
 import { ProCard, Statistic, StatisticCard } from '@ant-design/pro-components'
-import { useApiClient } from '../../../hooks/api';
+import { useApiClient } from '../../../hooks/api'
 import { useAppSelector } from '../../../redux/hooks'
-import { ListItem } from '../../../types/lists';
+import type { ListItem } from '../../../types/lists'
 
 const defaultStats = {
     subscribed: 0,

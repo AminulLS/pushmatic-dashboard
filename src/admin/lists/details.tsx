@@ -5,7 +5,7 @@ import type { MenuProps } from 'antd'
 import {
     AppstoreOutlined, CalendarOutlined, ClusterOutlined, FilePdfOutlined,
     FileTextOutlined, RadarChartOutlined, SettingOutlined, UserOutlined
-} from '@ant-design/icons';
+} from '@ant-design/icons'
 import { useApiClient } from '../../hooks/api'
 import { useAppDispatch } from '../../redux/hooks'
 import { setStateList } from '../../redux/list-slicer'

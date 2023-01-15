@@ -11,8 +11,8 @@ import { useApiClient } from '../../../hooks/api'
 import { useAdImages, useAdTags, useProviders } from '../../../hooks/cache'
 import { useProfileFields, useIconTypes } from '../../../hooks/tags'
 import { useAppSelector } from '../../../redux/hooks'
-import { AdItem } from '../../../types/ads'
-import { ListItem } from '../../../types/lists'
+import type { AdItem } from '../../../types/ads'
+import type { ListItem } from '../../../types/lists'
 
 function Ads() {
     const list = useAppSelector<ListItem>(({ list }) => list.current)

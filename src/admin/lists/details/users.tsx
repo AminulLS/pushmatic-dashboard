@@ -1,14 +1,14 @@
-import { ProTable } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components'
 import React from 'react'
 import dayjs from 'dayjs'
 import { Dropdown } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import type { ProColumns } from '@ant-design/pro-components'
 import { RocketOutlined, EyeOutlined } from '@ant-design/icons'
-import { useApiClient } from '../../../hooks/api';
+import { useApiClient } from '../../../hooks/api'
 import { useAppSelector } from '../../../redux/hooks'
-import { ListItem } from '../../../types/lists'
-import { UserItem } from '../../../types/users'
+import type { ListItem } from '../../../types/lists'
+import type { UserItem } from '../../../types/users'
 
 function Users() {
     const list = useAppSelector<ListItem>(({ list }) => list.current)
@@ -105,7 +105,7 @@ function Users() {
             rowKey="_id"
             request={(params) => {
                 params.list_id = list._id
-                const qs = new URLSearchParams(params);
+                const qs = new URLSearchParams(params)
 
                 return apiClient(`/users?${qs.toString()}`).then(({ data }) => data)
             }}

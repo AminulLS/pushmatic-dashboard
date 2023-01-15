@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { setCache } from '../redux/cache-reducer';
+import { useEffect } from 'react'
+import { setCache } from '../redux/cache-reducer'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { ProviderCollection } from '../types/providers';
+import type { ProviderCollection } from '../types/providers'
 import { useApiClient } from './api'
 
 export function useProviders(): ProviderCollection {

@@ -7,7 +7,7 @@ import { DualAxes, Line } from '@ant-design/plots'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { useApiClient } from '../../../hooks/api'
 import { useAppSelector } from '../../../redux/hooks'
-import { ListItem } from '../../../types/lists'
+import type { ListItem } from '../../../types/lists'
 import { mapDualAxis, mapHourlyLine } from '../../../utils/chart-mapper'
 import reportColumns from '../../../components/report-columns'
 
@@ -15,7 +15,7 @@ function Reports() {
     const list = useAppSelector<ListItem>(({ list }) => list.current)
     const apiClient = useApiClient()
     const [stats, setStats] = useState<[]>([])
-    const [hourlyStats, setHourlyStats] = useState<[]>([]);
+    const [hourlyStats, setHourlyStats] = useState<[]>([])
     const [activeKey, setActiveKey] = useState<'summary' | 'welcome' | 'regular'>('summary')
 
     const actions: ProColumns[] = [
@@ -30,7 +30,7 @@ function Reports() {
                 placement="bottomRight"
                 menu={{
                     items: ['appcast', 'talent', 'talroo', 'upward', 'omxml'].map(item => {
-                        const key = `${item}_${record._id}`;
+                        const key = `${item}_${record._id}`
                         return {
                             label: `Refresh ${item}`,
                             key: key,
@@ -51,13 +51,13 @@ function Reports() {
                                         message.success({
                                             content: data.message,
                                             key
-                                        });
+                                        })
                                     })
                                     .catch((err) => {
                                         message.error({
                                             content: err?.data?.message ?? err.statusText,
                                             key
-                                        });
+                                        })
                                     })
                             },
                         }
@@ -87,14 +87,14 @@ function Reports() {
                 request={(params) => {
                     params.id = list._id
 
-                    const qs = new URLSearchParams(params);
+                    const qs = new URLSearchParams(params)
 
                     return apiClient
                         .get(`/reports/daily-by-list?${qs.toString()}`)
                         .then(({ data }) => {
-                            setStats(data.data);
+                            setStats(data.data)
 
-                            return data;
+                            return data
                         })
                 }}
                 rowKey="_id"
@@ -202,7 +202,7 @@ function Reports() {
                 request={(params) => {
                     params.id = list._id
 
-                    const qs = new URLSearchParams(params);
+                    const qs = new URLSearchParams(params)
 
                     return apiClient
                         .get(`/reports/daily-by-list-device?${qs.toString()}`)
@@ -248,7 +248,7 @@ function Reports() {
                 request={(params) => {
                     params.id = list._id
 
-                    const qs = new URLSearchParams(params);
+                    const qs = new URLSearchParams(params)
 
                     return apiClient
                         .get(`/reports/daily-by-list-browser?${qs.toString()}`)
@@ -271,7 +271,7 @@ function Reports() {
                 request={(params) => {
                     params.id = list._id
 
-                    const qs = new URLSearchParams(params);
+                    const qs = new URLSearchParams(params)
 
                     return apiClient
                         .get(`/reports/daily-by-list-provider?${qs.toString()}`)

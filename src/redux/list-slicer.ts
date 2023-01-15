@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ListStates } from '../types/lists';
+import type { ListStates } from '../types/lists'
 
 const initialState: ListStates = {}
 

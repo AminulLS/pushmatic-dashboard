@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AuthProfile } from '../types/admins'
+import type { AuthProfile } from '../types/admins'
 
 const AUTH_TOKEN_KEY = 'admin_token'
 const currentToken = localStorage.getItem('admin_token')

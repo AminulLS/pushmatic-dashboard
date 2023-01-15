@@ -11,8 +11,8 @@ import { mapDualAxis, mapHourlyLine } from '../utils/chart-mapper'
 
 function Reports() {
     const apiClient = useApiClient()
-    const [stats, setStats] = useState<[]>([]);
-    const [hourlyStats, setHourlyStats] = useState<[]>([]);
+    const [stats, setStats] = useState<[]>([])
+    const [hourlyStats, setHourlyStats] = useState<[]>([])
     const [activeKey, setActiveKey] = useState<'summary' | 'welcome' | 'regular'>('summary')
 
     const actions: ProColumns[] = [
@@ -26,11 +26,11 @@ function Reports() {
                 shape="circle"
                 icon={<ReloadOutlined />}
                 onClick={(e: any) => {
-                    e.nativeEvent.target.disabled = true;
+                    e.nativeEvent.target.disabled = true
                     message.loading({
                         content: 'Requesting...',
                         key: `${record._id}`,
-                    });
+                    })
 
                     apiClient.post('/reports/master-revenue-update', {
                         id: record.list_id,
@@ -39,15 +39,15 @@ function Reports() {
                         message.success({
                             content: data.message,
                             key: `${record._id}`,
-                        });
+                        })
                     }).catch((res) => {
                         message.error({
                             content: res?.data?.message ?? res.statusText,
                             key: `${record._id}`,
-                        });
+                        })
                     }).catch(() => {
-                        e.nativeEvent.target.disabled = false;
-                    });
+                        e.nativeEvent.target.disabled = false
+                    })
                 }}
             />),
         }
@@ -285,7 +285,7 @@ function Reports() {
                 }}
             />
         </>
-    );
+    )
 }
 
 export default Reports
