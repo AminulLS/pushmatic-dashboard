@@ -84,6 +84,7 @@ function Users() {
             width: 75,
             fixed: 'right',
             render: (_, record) => (<Dropdown.Button
+                size="small"
                 menu={{
                     items: [{
                         key: 'send_push',

@@ -87,7 +87,6 @@ function Index() {
             headerTitle="Lists"
             scroll={{ x: 1000 }}
             columns={columns}
-            defaultSize="small"
             rowKey="_id"
             request={(params) => {
                 const qs = new URLSearchParams(params)

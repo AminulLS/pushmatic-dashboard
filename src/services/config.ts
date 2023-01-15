@@ -1,7 +1,9 @@
-import type { HostCollection, HostItem } from '../types/hosts'
+import type { HostItem } from '../types/hosts'
 import cleanHost from '../utils/clean-host'
 
-export const hosts: HostCollection = {
+export const hosts: {
+    [name: string]: HostItem
+} = {
     'localhost:3000': {
         domain: 'localhost',
         cdn: 'http://localhost:3000/storage/',

@@ -64,7 +64,7 @@ function Reports() {
                     })
                 }}
             >
-                <Button shape="circle" size="small"><EllipsisOutlined /></Button>
+                <Button size="small" shape="circle"><EllipsisOutlined /></Button>
             </Dropdown>),
         }
     ]

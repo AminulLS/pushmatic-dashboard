@@ -5,19 +5,22 @@ import { ProTable } from '@ant-design/pro-components'
 import type { ProColumns } from '@ant-design/pro-components'
 import { EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { useApiClient } from '../hooks/api'
+import { useAvailableAdminStatuses, useAvailableAdminRoles } from '../hooks/tags'
 import type { AdminItem } from '../types/admins'
 
 function Admins() {
     const adminIndexTable = useRef<any>()
     const apiClient = useApiClient()
     const [loading, setLoading] = useState<boolean>(false)
+    const adminRoles = useAvailableAdminRoles()
+    const adminStatuses = useAvailableAdminStatuses()
     const [adminForm] = Form.useForm()
     const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
     const [editAdmin, setEditAdmin] = useState<AdminItem>({})
 
     const handleAdminForm = (params: AdminItem) => {
         setLoading(true)
-        const endpoint = editAdmin?._id ? `/admins/${editAdmin._id}` : '/admins'
+        const endpoint = editAdmin._id ? `/admins/${editAdmin._id}` : '/admins'
 
         apiClient.post(endpoint, params)
             .then(({ data }) => {
@@ -27,7 +30,7 @@ function Admins() {
                 adminIndexTable.current.reloadAndRest()
                 setEditAdmin({})
             })
-            .catch(err => message.error(err.message))
+            .catch(err => message.error((err.response?.data?.message ?? err.response?.statusText) ?? 'Unable to save the admin.'))
             .finally(() => setLoading(false))
     }
 
@@ -39,13 +42,15 @@ function Admins() {
             width: 175,
             ellipsis: true,
             fixed: 'left',
-        }, {
+        },
+        {
             title: 'Email',
             dataIndex: 'email',
             search: false,
             ellipsis: true,
             width: 175,
-        }, {
+        },
+        {
             title: 'Role',
             dataIndex: 'role',
             search: false,
@@ -53,7 +58,8 @@ function Admins() {
             width: 100,
             renderText: (val) => <Tag
                 color={val === 'admin' ? 'success' : 'default'}>{val?.toUpperCase() || 'INVALID'}</Tag>,
-        }, {
+        },
+        {
             title: 'Status',
             dataIndex: 'status',
             search: false,
@@ -62,24 +68,29 @@ function Admins() {
             renderText: (val) => (
                 <Tag color={val === 'active' ? 'success' : 'default'}>{val?.toUpperCase() || 'INVALID'}</Tag>
             ),
-        }, {
+        },
+        {
             title: 'Created at',
             dataIndex: 'created_at',
             search: false,
             width: 170,
             renderText: (val) => dayjs(val).format('YYYY-MM-DD hh:mm'),
-        }, {
+        },
+        {
             title: 'Updated at',
             dataIndex: 'updated_at',
             search: false,
             width: 170,
             renderText: (val) => dayjs(val).format('YYYY-MM-DD hh:mm'),
-        }, {
+        },
+        {
             title: 'Action',
             search: false,
             width: 75,
             fixed: 'right',
             render: (_, record) => (<Button
+                shape="circle"
+                size="small"
                 onClick={() => {
                     setEditAdmin({
                         _id: record._id,
@@ -99,9 +110,9 @@ function Admins() {
     return (
         <>
             <Modal
-                title={editAdmin?._id ? 'Edit admin' : 'Create new admin'}
+                title={editAdmin._id ? 'Edit admin' : 'Create new admin'}
                 open={addModalVisible}
-                okText={editAdmin?._id ? "Update" : "Create"}
+                okText={editAdmin._id ? "Update" : "Create"}
                 okButtonProps={{ loading }}
                 destroyOnClose={true}
                 onOk={() => adminForm.submit()}
@@ -120,64 +131,26 @@ function Admins() {
                     preserve={false}
                     initialValues={editAdmin}
                 >
-                    <Form.Item
-                        name="name"
-                        label="Name"
-                        rules={[{ required: true }]}
-                    >
+                    <Form.Item name="name" label="Name" rules={[{ required: true }]}>
                         <Input placeholder="Enter the admin name..." />
                     </Form.Item>
 
-                    <Form.Item
-                        name="email"
-                        label="Email"
-                        rules={[{ required: true, type: 'email' }]}
-                    >
+                    <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
                         <Input placeholder="Enter the admin email..." />
                     </Form.Item>
                     <Form.Item
                         name="password"
                         label="Password"
-                        rules={[{ required: !editAdmin?._id }]}
-                        help={editAdmin?._id ? 'Leave blank for keep old password.' : undefined}
+                        rules={[{ required: !editAdmin._id }]}
+                        help={editAdmin._id ? 'Leave blank for keep old password.' : undefined}
                     >
                         <Input placeholder="Enter the admin password..." />
                     </Form.Item>
-                    <Form.Item
-                        name="role"
-                        label="Role"
-                        rules={[{ required: true }]}
-                    >
-                        <Select
-                            placeholder="Select admin role..."
-                            options={[
-                                {
-                                    label: 'Admin',
-                                    value: 'admin',
-                                }, {
-                                    label: 'Partner',
-                                    value: 'partner',
-                                }
-                            ]}
-                        />
+                    <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+                        <Select placeholder="Select admin role..." options={adminRoles} />
                     </Form.Item>
-                    <Form.Item
-                        name="status"
-                        label="Status"
-                        rules={[{ required: true }]}
-                    >
-                        <Select
-                            placeholder="Select admin status..."
-                            options={[
-                                {
-                                    label: 'Active',
-                                    value: "active",
-                                }, {
-                                    label: 'Inactive',
-                                    value: 'inactive',
-                                }
-                            ]}
-                        />
+                    <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+                        <Select placeholder="Select admin status..." options={adminStatuses} />
                     </Form.Item>
                 </Form>
             </Modal>

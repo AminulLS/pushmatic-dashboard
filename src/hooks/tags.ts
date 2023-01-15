@@ -1,6 +1,7 @@
 import type { TreeItem } from '../types/misc'
 
-type DefaultValue = { label: string, value: string }
+type DefaultValue = { label: string, value: string, disabled?: boolean }
+
 export const useProfileFields = (): DefaultValue[] => [
     {
         label: 'First Name',
@@ -155,6 +156,45 @@ export const useIconTypes = (): DefaultValue[] => [
     }
 ]
 
+export const useSegmentOperators = (): DefaultValue[] => [
+    {
+        label: 'Is equal to',
+        value: 'in',
+    },
+    {
+        label: 'Is not equal to',
+        value: 'not_in',
+    },
+    {
+        label: 'Contains',
+        value: 'contains'
+    },
+    {
+        label: 'Contains Exact',
+        value: 'contains_exact'
+    },
+    {
+        label: 'Equal or Greater',
+        value: 'gte'
+    },
+    {
+        label: 'Equal or Less',
+        value: 'lte'
+    }
+]
+
+export const useSegmentConditions = (): DefaultValue[] => [
+    {
+        label: 'AND',
+        value: 'and',
+    },
+    {
+        label: 'OR',
+        value: 'or',
+        disabled: true,
+    },
+]
+
 export const useAvailableDays = (): { [name: string]: string } => ({
     Any: 'Everyday',
     Sun: 'Sunday',
@@ -225,6 +265,29 @@ export const useGeneratedTimesOfDays = (): TreeItem[] => {
 
     return treeData
 }
+
+export const useAvailableAdminRoles = (): DefaultValue[] => [
+    {
+        label: 'Administrator',
+        value: "admin",
+    },
+    {
+        label: 'Partner',
+        value: 'partner',
+    }
+]
+
+export const useAvailableAdminStatuses = (): DefaultValue[] => [
+    {
+        label: 'Active',
+        value: "active",
+    },
+    {
+        label: 'Inactive',
+        value: 'inactive',
+    }
+]
+
 export const useSuggestedKeywords = (): string[] => [
     'warehouse', 'retail', 'driver', 'customer support'
 ]

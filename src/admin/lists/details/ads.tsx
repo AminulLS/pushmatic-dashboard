@@ -43,11 +43,10 @@ function Ads() {
         apiClient
             .delete(`/ads/${id}`)
             .then(({ data }) => {
-                message.success(data.message ?? 'Ad deleted successfully')
+                message.success(data.message)
                 adsTable.current.reloadAndRest()
             })
-            .catch(err => message.error(err?.data?.message ?? err.statusText))
-            .finally(() => setIsLoading(false))
+            .catch(err => message.error((err.response?.data?.message ?? err.response?.statusText) ?? 'Unable to delete the ad.'))
     }
 
     const saveAd = (params: AdItem) => {
@@ -157,11 +156,7 @@ function Ads() {
             render: (_, record) => {
                 return (
                     <Space>
-                        <Button
-                            shape="circle"
-                            icon={<EditOutlined />}
-                            onClick={() => handleModal(record)}
-                        />
+                        <Button size="small" shape="circle" icon={<EditOutlined />} onClick={() => handleModal(record)} />
                         <Popconfirm
                             title="Are you sure delete this ad?"
                             okText="Yes"
@@ -170,11 +165,7 @@ function Ads() {
                             placement="left"
                             onConfirm={() => handleDelete(record)}
                         >
-                            <Button
-                                danger={true}
-                                shape="circle"
-                                icon={<DeleteOutlined />}
-                            />
+                            <Button size="small" danger={true} shape="circle" icon={<DeleteOutlined />} />
                         </Popconfirm>
                     </Space>
                 )
@@ -214,11 +205,7 @@ function Ads() {
                 search={{ filterType: 'light' }}
                 headerTitle="Ads"
                 toolBarRender={() => [
-                    <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={() => handleModal({})}
-                    />
+                    <Button type="primary" icon={<PlusOutlined />} onClick={() => handleModal({})} />
                 ]}
                 columnsState={{
                     persistenceKey: 'ads-by-list-table',
@@ -255,10 +242,9 @@ function Ads() {
                         <Input placeholder="Ad Title" />
                     </Form.Item>
                     <Form.Item
-                        name="content"
-                        label="Content"
-                        extra={(<small>Available Tags: {adTags.join(', ')}</small>)}
+                        name="content" label="Content"
                         rules={[{ required: true }]}
+                        extra={<small>Available Tags: {adTags.join(', ')}</small>}
                     >
                         <Input.TextArea placeholder="Ad Content" />
                     </Form.Item>
@@ -268,11 +254,7 @@ function Ads() {
                     <Form.Item noStyle shouldUpdate={(a, b) => a.ad_type !== b.ad_type}>
                         {({ getFieldValue }) => getFieldValue('ad_type') === 'directlink' ? (
                             <>
-                                <Form.Item
-                                    name="ad_link"
-                                    label="Ad Link"
-                                    rules={[{ required: true }, { type: 'url' }]}
-                                >
+                                <Form.Item name="ad_link" label="Ad Link" rules={[{ required: true }, { type: 'url' }]}>
                                     <Input placeholder="Enter the ad link..." />
                                 </Form.Item>
                                 <Form.Item
@@ -320,11 +302,7 @@ function Ads() {
                     </Form.Item>
                     <Form.Item noStyle shouldUpdate={(a, b) => a.icon_type !== b.icon_type}>
                         {({ getFieldValue }) => getFieldValue('icon_type') === 'custom' ? (
-                            <Form.Item
-                                name="icon_url"
-                                label="Icon URL"
-                                rules={[{ required: true }, { type: 'url' }]}
-                            >
+                            <Form.Item name="icon_url" label="Icon URL" rules={[{ required: true }, { type: 'url' }]}>
                                 <Radio.Group
                                     options={adImages && adImages?.map(img => {
                                         return {

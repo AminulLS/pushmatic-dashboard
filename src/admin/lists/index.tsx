@@ -72,6 +72,7 @@ function Index() {
             width: 75,
             fixed: 'right',
             render: (_, record) => (<Dropdown.Button
+                size="small"
                 onClick={() => navigate(`/admin/lists/${record._id}`)}
                 menu={{
                     items: [{

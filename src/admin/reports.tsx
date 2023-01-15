@@ -24,6 +24,7 @@ function Reports() {
             align: 'center',
             render: (_, record) => (<Button
                 shape="circle"
+                size="small"
                 icon={<ReloadOutlined />}
                 onClick={(e: any) => {
                     e.nativeEvent.target.disabled = true

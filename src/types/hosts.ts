@@ -11,7 +11,3 @@ export interface Host {
 }
 
 export type HostItem = Host
-
-export type HostCollection = {
-    [name: string]: HostItem
-}
