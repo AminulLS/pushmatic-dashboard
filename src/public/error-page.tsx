@@ -5,11 +5,14 @@ import { useRouteError } from 'react-router-dom'
 function ErrorPage({ status, title, subTitle, extra }: any) {
     const error: any = useRouteError()
 
-    console.error(error)
     const code = status ?? error?.status
     const heading = title ?? 'Oops!'
     const subHeading = subTitle ?? 'Sorry, an unexpected error has occurred.'
     const content = extra ?? (<i>{error?.statusText || error?.message}</i>)
+
+    if (error) {
+        console.error(error)
+    }
 
     return (
         <div style={{

@@ -1,6 +1,5 @@
-import { ProCard } from '@ant-design/pro-components'
-import { Spin } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { Card, Spin } from 'antd'
 import ReactMarkdown from 'react-markdown'
 import { useAppSelector } from '../../../redux/hooks'
 import { currentHost } from '../../../services/config'
@@ -29,9 +28,9 @@ function Developers() {
     }
 
     return (
-        <ProCard>
+        <Card>
             <ReactMarkdown>{content}</ReactMarkdown>
-        </ProCard>
+        </Card>
     )
 }
 
