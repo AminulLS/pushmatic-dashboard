@@ -85,7 +85,7 @@ function Campaigns() {
                             onClick={() => navigate(`/admin/lists/${list._id}/campaigns?action=edit&id=${record._id}`)}
                         />
                         <Popconfirm
-                            title="Are you sure delete this ad?"
+                            title="Are you sure delete this campaign?"
                             okText="Yes"
                             okType="danger"
                             cancelText="No"
