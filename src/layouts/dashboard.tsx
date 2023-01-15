@@ -47,7 +47,7 @@ function Dashboard({ menuItems }: any) {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    defaultSelectedKeys={[location.pathname]}
+                    selectedKeys={[location.pathname]}
                     onClick={(item) => navigate(item.key)}
                     items={menuItems}
                 />

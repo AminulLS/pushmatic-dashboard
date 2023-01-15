@@ -92,7 +92,7 @@ function Details() {
     return (
         <>
             <Menu
-                defaultSelectedKeys={[location.pathname]}
+                selectedKeys={[location.pathname]}
                 onClick={(item) => navigate(item.key)}
                 mode="horizontal"
                 items={items}
