@@ -47,7 +47,7 @@ function Ads() {
             endpoint = `/ads/${id}`
         }
 
-        apiClient
+        return apiClient
             .post(endpoint, fields)
             .then(({ data }) => {
                 setModalVisible(false)
@@ -303,16 +303,14 @@ function Ads() {
                     <Form.Item noStyle shouldUpdate={(a, b) => a.icon_type !== b.icon_type}>
                         {({ getFieldValue }) => getFieldValue('icon_type') === 'custom' ? (
                             <Form.Item name="icon_url" label="Icon URL" rules={[{ required: true }, { type: 'url' }]}>
-                                <Radio.Group
-                                    options={adImages && adImages?.map(img => {
-                                        return {
-                                            value: img,
-                                            label: (
-                                                <Image src={img} preview={false} width={32} style={{ margin: '2px 0' }} />
-                                            ),
-                                        }
-                                    })}
-                                />
+                                <Radio.Group options={adImages && adImages?.map(img => {
+                                    return {
+                                        value: img,
+                                        label: (
+                                            <Image src={img} preview={false} width={32} style={{ margin: '2px 0' }} />
+                                        ),
+                                    }
+                                })} />
                             </Form.Item>
                         ) : null}
                     </Form.Item>
