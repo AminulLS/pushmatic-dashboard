@@ -235,10 +235,18 @@ function Configuration() {
                                     <>
                                         <Form.Item name="admin_id" label="Partner - Owner">
                                             <Select
-                                                allowClear={true}
                                                 showSearch={true}
-                                                placeholder="Select and admin..."
-                                                options={admins.map(admin => ({ value: admin._id, label: admin.name }))}
+                                                placeholder="Select an admin..."
+                                                options={[
+                                                    {
+                                                        label: 'No Admin',
+                                                        value: ''
+                                                    },
+                                                    ...admins.map(admin => ({
+                                                        value: admin._id,
+                                                        label: admin.name
+                                                    }))
+                                                ]}
                                             />
                                         </Form.Item>
                                         <Form.Item name="rev_share" label="Revenue Share" help="Any revenue changes will effect next day.">

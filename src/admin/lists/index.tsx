@@ -72,13 +72,13 @@ function Index() {
             width: 75,
             fixed: 'right',
             render: (_, record) => (<Dropdown.Button
-                onClick={() => navigate(`${record._id}`)}
+                onClick={() => navigate(`/admin/lists/${record._id}`)}
                 menu={{
                     items: [{
                         label: 'Configuration',
                         icon: <SettingOutlined />,
                         key: `config_${record._id}`,
-                        onClick: () => navigate(`${record._id}/configuration`),
+                        onClick: () => navigate(`/admin/lists/${record._id}/configuration`),
                     }]
                 }}
             >
