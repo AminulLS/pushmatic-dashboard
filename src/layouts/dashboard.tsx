@@ -27,10 +27,7 @@ function Dashboard({ menuItems }: any) {
     }
 
     // handle permissions
-    const filteredPerms = matches
-        .filter(({ handle }: any) => handle?.permissions)
-        .map(({ handle }: any) => handle.permissions)
-        .flat()
+    const filteredPerms = matches.filter(({ handle }: any) => handle?.permissions).map(({ handle }: any) => handle.permissions).flat()
     const reqPerms = Array.from(new Set(filteredPerms))
     const authPerms = Array.from(new Set(auth.permissions))
 
@@ -57,6 +54,8 @@ function Dashboard({ menuItems }: any) {
                     <div className="app-content-header-left"></div>
                     <div className="app-content-header-right">
                         <Dropdown.Button
+                            placement="bottomRight"
+                            icon={<UserOutlined />}
                             menu={{
                                 onClick: () => logout(String(auth.token)).finally(() => dispatch(unsetAuth())),
                                 items: [
@@ -67,8 +66,6 @@ function Dashboard({ menuItems }: any) {
                                     },
                                 ]
                             }}
-                            placement="bottomRight"
-                            icon={<UserOutlined />}
                         >
                             Hi, {auth.name}
                         </Dropdown.Button>

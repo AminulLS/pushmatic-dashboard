@@ -37,27 +37,12 @@ function Ads() {
         setModalVisible(true)
     }
 
-    const handleDelete = (record: AdItem) => {
-        const id = record._id
-
-        apiClient
-            .delete(`/ads/${id}`)
-            .then(({ data }) => {
-                message.success(data.message)
-                adsTable.current.reloadAndRest()
-            })
-            .catch(err => message.error((err.response?.data?.message ?? err.response?.statusText) ?? 'Unable to delete the ad.'))
-    }
-
     const saveAd = (params: AdItem) => {
         const fields = params
         const id = modalAd._id
         let endpoint = `/ads`
-        let msgOk = 'Ad updated successfully'
-
         if (!id) {
             fields.list_id = list._id
-            msgOk = 'Ad created successfully'
         } else {
             endpoint = `/ads/${id}`
         }
@@ -65,11 +50,12 @@ function Ads() {
         apiClient
             .post(endpoint, fields)
             .then(({ data }) => {
-                message.success(data.message ?? msgOk)
                 setModalVisible(false)
                 adEditForm.resetFields()
                 setModalAd({})
                 adsTable.current.reloadAndRest()
+
+                return message.success(data.message)
             })
             .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
             .finally(() => setIsLoading(false))
@@ -168,7 +154,16 @@ function Ads() {
                             okType="danger"
                             cancelText="No"
                             placement="left"
-                            onConfirm={() => handleDelete(record)}
+                            onConfirm={() => {
+                                return apiClient
+                                    .delete(`/ads/${record._id}`)
+                                    .then(({ data }) => {
+                                        adsTable.current.reloadAndRest()
+
+                                        return message.success(data.message)
+                                    })
+                                    .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
+                            }}
                         >
                             <Button size="small" danger={true} shape="circle" icon={<DeleteOutlined />} />
                         </Popconfirm>

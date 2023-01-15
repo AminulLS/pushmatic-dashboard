@@ -47,18 +47,15 @@ function Reports() {
                                         provider: item,
                                         day: dayjs(record.date).format('YYYY-MM-DD'),
                                     })
-                                    .then(({ data }) => {
-                                        message.success({
-                                            content: data.message,
-                                            key
+                                    .then(({ data }) => message.success({
+                                        key,
+                                        content: data.message
+                                    }))
+                                    .catch((err) => message.error({
+                                            key,
+                                            content: (err?.response?.data?.message ?? err?.response?.statusText) ?? err.message
                                         })
-                                    })
-                                    .catch((err) => {
-                                        message.error({
-                                            content: (err?.response?.data?.message ?? err?.response?.statusText) ?? err.message,
-                                            key
-                                        })
-                                    })
+                                    )
                             },
                         }
                     })
@@ -81,6 +78,7 @@ function Reports() {
             </Card>
 
             <ProTable
+                search={{ filterType: 'light' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
                 columns={[...reportColumns[activeKey], ...actions]}

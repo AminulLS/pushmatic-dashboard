@@ -33,22 +33,22 @@ function Reports() {
                         key: `${record._id}`,
                     })
 
-                    apiClient.post('/reports/master-revenue-update', {
-                        id: record.list_id,
-                        day: dayjs(record.date).format('YYYY-MM-DD'),
-                    }).then(({ data }) => {
-                        message.success({
+                    apiClient
+                        .post('/reports/master-revenue-update', {
+                            id: record.list_id,
+                            day: dayjs(record.date).format('YYYY-MM-DD'),
+                        })
+                        .then(({ data }) => message.success({
                             content: data.message,
                             key: `${record._id}`,
-                        })
-                    }).catch(err => {
-                        message.error({
+                        }))
+                        .catch(err => message.error({
                             content: (err?.response?.data?.message ?? err?.response?.statusText) ?? err.message,
                             key: `${record._id}`,
+                        }))
+                        .finally(() => {
+                            e.nativeEvent.target.disabled = false
                         })
-                    }).finally(() => {
-                        e.nativeEvent.target.disabled = false
-                    })
                 }}
             />),
         }
@@ -65,6 +65,7 @@ function Reports() {
                 />
             </Card>
             <ProTable
+                search={{ filterType: 'light' }}
                 bordered={true}
                 scroll={{ x: 1000 }}
                 columns={[...reportColumns[activeKey], ...actions]}

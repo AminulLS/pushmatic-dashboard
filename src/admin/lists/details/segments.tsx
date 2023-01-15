@@ -65,8 +65,9 @@ function Segments() {
                                 return apiClient
                                     .delete(`/segments/${record._id}`)
                                     .then(({ data }) => {
-                                        message.success(data.message ?? 'Segment deleted successfully')
                                         segmentsTable.current.reloadAndRest()
+
+                                        return message.success(data.message)
                                     })
                                     .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
                             }}
@@ -124,11 +125,12 @@ function Segments() {
                     return apiClient
                         .post(endpoint, data)
                         .then(({ data }) => {
-                            message.success(data.message)
                             setIsModalOpen(false)
                             modalForm.resetFields()
                             setCurrentSegment({})
                             segmentsTable.current.reloadAndRest()
+
+                            return message.success(data.message)
                         })
                         .catch(err => message.error((err.response?.data?.message ?? err.response?.statusText) ?? 'Unable to send test notification'))
                 }}

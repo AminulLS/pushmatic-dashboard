@@ -24,11 +24,12 @@ function Admins() {
 
         apiClient.post(endpoint, params)
             .then(({ data }) => {
-                message.success(data.message)
                 setAddModalVisible(false)
                 adminForm.resetFields()
                 adminIndexTable.current.reloadAndRest()
                 setEditAdmin({})
+
+                return message.success(data.message)
             })
             .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
             .finally(() => setLoading(false))

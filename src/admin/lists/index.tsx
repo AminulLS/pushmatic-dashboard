@@ -93,10 +93,11 @@ function Index() {
 
         apiClient.post('/lists', params)
             .then(({ data }) => {
-                message.success(data.message ?? 'New list has been created')
                 setAddModalVisible(false)
                 listForm.resetFields()
                 listIndexTable.current.reloadAndRest()
+
+                return message.success(data.message)
             })
             .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
             .finally(() => setLoading(false))
