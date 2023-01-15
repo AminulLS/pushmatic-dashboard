@@ -93,10 +93,7 @@ function Segments() {
                 rowKey="_id"
                 actionRef={segmentsTable}
                 toolBarRender={() => [
-                    <Button
-                        type="primary"
-                        onClick={() => setIsModalOpen(true)}
-                    >
+                    <Button type="primary" onClick={() => setIsModalOpen(true)}>
                         Create New Segment
                     </Button>
                 ]}

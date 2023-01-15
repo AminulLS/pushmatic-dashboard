@@ -156,7 +156,12 @@ function Ads() {
             render: (_, record) => {
                 return (
                     <Space>
-                        <Button size="small" shape="circle" icon={<EditOutlined />} onClick={() => handleModal(record)} />
+                        <Button
+                            size="small"
+                            shape="circle"
+                            icon={<EditOutlined />}
+                            onClick={() => handleModal(record)}
+                        />
                         <Popconfirm
                             title="Are you sure delete this ad?"
                             okText="Yes"
