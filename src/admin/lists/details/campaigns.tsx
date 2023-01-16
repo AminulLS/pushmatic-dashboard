@@ -30,15 +30,41 @@ function Campaigns() {
             filters: true,
             valueEnum: {
                 all: {
-                    text: 'All'
+                    text: 'All',
+                    status: 'Default',
+                },
+                onetime: {
+                    text: 'Onetime',
+                    status: 'Default',
                 },
                 scheduled: {
                     text: 'Scheduled',
                     status: 'Success',
                 },
-                onetime: {
-                    text: 'Onetime',
+                funnel: {
+                    text: 'Funnel',
                     status: 'Default',
+                },
+            },
+        },
+        {
+            title: 'Audience',
+            dataIndex: 'audience',
+            key: 'audience',
+            valueType: 'select',
+            filters: true,
+            valueEnum: {
+                all: {
+                    text: 'All',
+                    status: 'Default',
+                },
+                segmented: {
+                    text: 'Segmented',
+                    status: 'Success',
+                },
+                filtered: {
+                    text: 'Filtered',
+                    status: 'Warning',
                 },
             },
         },
