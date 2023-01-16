@@ -10,7 +10,6 @@ import ListsLayout from '../admin/lists-layout'
 import ListAds from '../admin/lists/details/ads'
 import ListCampaigns from '../admin/lists/details/campaigns'
 import ListConfiguration from '../admin/lists/details/configuration'
-import ListFunnels from '../admin/lists/details/funnels'
 import ListDetails from '../admin/lists/details/index'
 import ListDevelopers from '../admin/lists/details/developers'
 import ListReports from '../admin/lists/details/reports'
@@ -96,14 +95,6 @@ const items: RouteObject[] = [
                                 handle: {
                                     title: 'Developers',
                                     permissions: ['lists_developers'],
-                                },
-                            },
-                            {
-                                path: 'funnels',
-                                element: <ListFunnels />,
-                                handle: {
-                                    title: 'Funnels',
-                                    permissions: ['funnels_read'],
                                 },
                             },
                             {

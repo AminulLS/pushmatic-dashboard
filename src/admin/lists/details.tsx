@@ -37,11 +37,6 @@ function Details() {
         {
             key: `/admin/lists/${list_id}/campaigns`,
             label: 'Campaigns',
-            icon: <CalendarOutlined />,
-        },
-        {
-            key: `/admin/lists/${list_id}/funnels`,
-            label: 'Funnels',
             icon: <RadarChartOutlined />,
         },
         {
