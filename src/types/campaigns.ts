@@ -1,19 +1,12 @@
-export interface CampaignMessageConfig {
-    [name: string]: any
+import { AdItem } from './ads'
 
-    campaign_ids?: string[]
-    exclude_campaign_ids?: string[]
-}
-
-export interface CampaignMessage {
+export interface CampaignMessage extends AdItem {
     time?: number
     time_type?: string
     type?: string
-    provider?: string
-    title?: string
-    message?: string
-    config?: CampaignMessageConfig
 }
+
+export type CampaignMessageItem = CampaignMessage
 
 export interface Campaign {
     _id?: string
@@ -24,7 +17,7 @@ export interface Campaign {
     queue?: string
     processor?: string
     status?: string
-    flows?: CampaignMessage[]
+    flows?: CampaignMessageItem[]
     created_at?: string
     updated_at?: string
 }

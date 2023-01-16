@@ -10,6 +10,7 @@ export interface Ad {
     icon_url?: string
     ad_link?: string
     ad_link_params?: string[]
+    keyword?: string
     config?: {
         campaign_ids?: string[]
         exclude_campaign_ids?: string[]

@@ -1,35 +1,37 @@
-import dayjs from 'dayjs'
 import React, { useEffect, useRef, useState } from 'react'
+import dayjs from 'dayjs'
+import { useSearchParams } from 'react-router-dom'
+import {
+    Alert, Avatar, Button, Card, DatePicker, Form, List, message, Modal
+} from 'antd'
 import {
     ProFormSelect,
-    ProFormText, ProFormTextArea,
+    ProFormText,
+    ProFormTextArea,
     StepsForm,
-    ProFormDateTimePicker, ProFormDependency, ProFormRadio
+    ProFormDependency,
+    ProFormRadio, ProFormItem
 } from '@ant-design/pro-components'
-import { Alert, Card, DatePicker, Form, message } from 'antd'
+import { EditOutlined } from '@ant-design/icons'
 import type { ProFormInstance } from '@ant-design/pro-components'
-import { useSearchParams } from 'react-router-dom'
+import AdComposer from '../../../components/ad-composer'
 import { useApiClient } from '../../../hooks/api'
-import { useAdTags, useProviders } from '../../../hooks/cache'
+import { useAdImages } from '../../../hooks/cache'
 import {
     useAvailableCampaignAudienceTypes,
     useAvailableCampaignTypes,
-    useOnlyUserFields,
     useSegmentBrowser,
     useSegmentDevice,
     useSegmentOs,
     useSegmentTypes
 } from '../../../hooks/tags'
 import { useAppSelector } from '../../../redux/hooks'
+import type { AdItem } from '../../../types/ads'
 import type { ListItem } from '../../../types/lists'
-import { appendSearchParams } from '../../../utils/urls'
 
 function CampaignAdd() {
     const [searchParams] = useSearchParams()
     const list = useAppSelector<ListItem>(({ list }) => list.current)
-    const providers = useProviders()
-    const profileFields = useOnlyUserFields()
-    const adTags = useAdTags()
     const segmentTypes = useSegmentTypes()
     const apiClient = useApiClient()
     const formBasicRef = useRef<ProFormInstance>()
@@ -40,6 +42,8 @@ function CampaignAdd() {
     const segmentOSes = useSegmentOs()
     const campaignTypes = useAvailableCampaignTypes()
     const audienceTypes = useAvailableCampaignAudienceTypes()
+    const adImages = useAdImages()
+    const [modalAd, setModalAd] = useState<AdItem>({})
 
     const segmentTypesByKeys: { [p: string]: string } = segmentTypes.reduce((obj, cur) => ({
         ...obj,
@@ -63,13 +67,12 @@ function CampaignAdd() {
 
         const filters = segmentTypes.map(sgm => sgm.value).filter(sgm => searchParams.get(`${sgm}_filters`))
         if (filters) {
-            const rules = filters.reduce((obj, sgm) => ({
-                ...obj,
-                [sgm]: searchParams.get(`${sgm}_filters`)?.split(',') ?? []
-            }), {})
-
             formFiltersRef.current?.setFieldValue('filters', filters)
-            formFiltersRef.current?.setFieldValue('rules', rules)
+            filters.forEach((filter, index) => {
+                const values = searchParams.get(`${filter}_filters`)?.split(',') ?? []
+
+                formFiltersRef.current?.setFieldValue(['rules', index, 'values'], values)
+            })
         }
 
         const allowedAudience = audienceTypes.map(({ value }) => value)
@@ -78,199 +81,226 @@ function CampaignAdd() {
         if (audienceType && allowedAudience.indexOf(audienceType) !== -1) {
             formFiltersRef.current?.setFieldValue('audience', audienceType)
         }
-
-        const allowedProviders = Object.keys(providers)
-        const provider = searchParams.get('provider')
-        if (provider && allowedProviders.indexOf(provider) !== -1) {
-            formComposeRef.current?.setFieldValue(['message', 'provider'], provider)
-        }
-    }, [searchParams, segmentTypes, campaignTypes, providers, audienceTypes])
+    }, [searchParams, segmentTypes, campaignTypes, audienceTypes])
 
     return (
-        <Card title="Create Campaign">
-            <StepsForm
-                onFinish={async (params) => {
-                    params.list_id = list._id
-                    params.segment_id = undefined
+        <>
+            <Card title="Create Campaign">
+                <StepsForm
+                    onFinish={async (params) => {
+                        params.list_id = list._id
+                        params.filters = undefined
 
-                    return await apiClient
-                        .post('/campaigns', params)
-                        .then(({ data }) => message.success(data.message))
-                        .catch(async err => {
-                            await message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message)
+                        return await apiClient
+                            .post('/campaigns', params)
+                            .then(({ data }) => message.success(data.message))
+                            .catch(async err => {
+                                await message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message)
 
-                            return false
-                        })
-                }}
-            >
-                <StepsForm.StepForm
-                    formRef={formBasicRef}
-                    requiredMark="optional"
-                    name="base"
-                    title="Basic"
-                    stepProps={{ description: 'General information' }}
+                                return false
+                            })
+                    }}
                 >
-                    <ProFormRadio.Group
-                        name="type"
-                        label="Type"
-                        radioType="button"
-                        rules={[{ required: true }]}
-                        options={campaignTypes}
-                    />
-                    <ProFormText
-                        name="name"
-                        label="Name"
-                        placeholder="Campaign name..."
-                        rules={[{ required: true }]}
-                    />
-                    <ProFormTextArea
-                        name="description"
-                        label="Description"
-                        placeholder="A note for the campaign"
-                    />
-                </StepsForm.StepForm>
-                <StepsForm.StepForm
-                    formRef={formFiltersRef}
-                    name="checkbox"
-                    title="Audience"
-                    requiredMark="optional"
-                    stepProps={{ description: 'Filters your audience', }}
-                >
-                    <ProFormRadio.Group
-                        name="audience"
-                        label="Type"
-                        radioType="button"
-                        rules={[{ required: true }]}
-                        options={audienceTypes}
-                    />
-
-                    <ProFormDependency name={['audience']}>
-                        {({ audience }) => (audience === 'all' && (
-                                <Alert type="warning" message="It will send to all active users in the list." style={{ marginBottom: 10 }} />)
-                        )}
-                    </ProFormDependency>
-
-                    <ProFormDependency name={['audience']}>
-                        {({ audience }) => (audience === 'segmented' && (<ProFormSelect
-                                name="segment_id"
-                                label="Segment"
-                                showSearch={true}
-                                request={async ({ keyWords }) => {
-                                    const params = {
-                                        list_id: list._id,
-                                        name: keyWords
-                                    }
-                                    const { data } = await apiClient.get(`/segments`, { params })
-
-                                    return data.data.map((d: any) => ({
-                                        value: d._id,
-                                        label: d.name,
-                                    }))
-                                }}
-                                rules={[{ required: true }]}
-                            />)
-                        )}
-                    </ProFormDependency>
-                    <ProFormDependency name={['audience']}>
-                        {({ audience }) => (audience === 'filtered' && (<>
-                                <ProFormSelect
-                                    mode="multiple"
-                                    name="filters"
-                                    label="Filters"
-                                    options={segmentTypes}
-                                    rules={[{ required: true }]}
-                                />
-
-                                <ProFormDependency name={['filters']}>
-                                    {({ filters }) => (
-                                        filters?.map((filter: string, key: number) => (
-                                            <ProFormSelect
-                                                key={key}
-                                                mode={attributeValues[filter] ? "multiple" : 'tags'}
-                                                name={['rules', filter]}
-                                                label={segmentTypesByKeys[filter]}
-                                                options={attributeValues[filter] ?? []}
-                                                rules={[{ required: true }]}
-                                            />
-                                        ))
-                                    )}
-                                </ProFormDependency>
-                            </>)
-                        )}
-                    </ProFormDependency>
-                </StepsForm.StepForm>
-                <StepsForm.StepForm
-                    formRef={formComposeRef}
-                    requiredMark="optional"
-                    name="message"
-                    title="Message"
-                    stepProps={{ description: 'Compose your message' }}
-                >
-                    <ProFormSelect
-                        name={['message', 'provider']}
-                        label="Job Source"
-                        options={Object.values(providers).map(({ label, value }) => ({ label, value }))}
-                        rules={[{ required: true }]}
-                    />
-                    <ProFormDependency name={['message', 'provider']}>
-                        {({ message }) => (message && message.provider === 'directlink' && (<>
-                            <ProFormText
-                                name={['message', 'ad_link']}
-                                label="Ad Link"
-                                rules={[{ required: true }, { type: 'url' }]}
-                            />
-                            <ProFormSelect
-                                name={['message', 'ad_link_params']}
-                                label="Ad Link Params"
-                                placeholder="Please select params"
-                                mode="multiple"
-                                options={profileFields.map(f => ({ label: f, value: f }))}
-                                extra={message && message.ad_link && message.ad_link_params &&
-                                    <Alert style={{ marginTop: 10 }} type="info" message={appendSearchParams(message.ad_link, message.ad_link_params)} />}
-                            />
-                        </>))}
-                    </ProFormDependency>
-                    <ProFormDependency name={['message', 'provider']}>
-                        {({ message }) => (message && message.provider !== 'directlink' && (<ProFormText
-                            name={['message', 'keyword']}
-                            label="Job Keyword"
-                            placeholder="Job search keyword"
-                            rules={[{ required: false }]}
-                        />))}
-                    </ProFormDependency>
-                    <ProFormText
-                        name={['message', 'title']}
-                        label="Title"
-                        placeholder="Push Title"
-                        rules={[{ required: true }]}
-                    />
-                    <ProFormTextArea
-                        name={['message', 'message']}
-                        label="Description"
-                        placeholder="Push Message..."
-                        rules={[{ required: true }]}
-                        extra={`Available tags: ${adTags.join(', ')}`}
-                    />
-                </StepsForm.StepForm>
-                <StepsForm.StepForm
-                    name="time"
-                    title="Send"
-                    stepProps={{ description: 'Schedule or Send' }}
-                >
-                    <Form.Item label="Sending Time" name="time">
-                        <DatePicker
-                            disabledDate={(c) => c && c.unix() < dayjs().startOf('day').unix()}
-                            disabledTime={(c) => ({
-                                disabledHours: () => c && c < dayjs() ? Array.from(Array(c.hour()).keys()) : [],
-                                disabledMinutes: () => c && c < dayjs() ? Array.from(Array(c.minute() + 1).keys()) : [],
-                            })}
-                            showTime={{ format: 'HH:mm' }}
-                            format="YYYY-MM-DD HH:mm"
+                    <StepsForm.StepForm
+                        formRef={formBasicRef}
+                        requiredMark="optional"
+                        name="base"
+                        title="Basic"
+                        stepProps={{ description: 'General information' }}
+                    >
+                        <ProFormRadio.Group
+                            name="type"
+                            label="Type"
+                            radioType="button"
+                            rules={[{ required: true }]}
+                            options={campaignTypes}
                         />
-                    </Form.Item>
-                </StepsForm.StepForm>
-            </StepsForm>
-        </Card>
+                        <ProFormText
+                            name="name"
+                            label="Name"
+                            placeholder="Campaign name..."
+                            rules={[{ required: true }]}
+                        />
+                        <ProFormTextArea
+                            name="description"
+                            label="Description"
+                            placeholder="A note for the campaign"
+                        />
+                    </StepsForm.StepForm>
+                    <StepsForm.StepForm
+                        formRef={formFiltersRef}
+                        name="checkbox"
+                        title="Audience"
+                        requiredMark="optional"
+                        stepProps={{ description: 'Filters your audience', }}
+                    >
+                        <ProFormRadio.Group
+                            name="audience"
+                            label="Type"
+                            radioType="button"
+                            rules={[{ required: true }]}
+                            options={audienceTypes}
+                        />
+
+                        <ProFormDependency name={['audience']}>
+                            {({ audience }) => {
+                                if (audience === 'segmented') {
+                                    return <ProFormSelect
+                                        name="segment_id"
+                                        label="Segment"
+                                        showSearch={true}
+                                        request={async ({ keyWords }) => {
+                                            const params = {
+                                                list_id: list._id,
+                                                name: keyWords
+                                            }
+                                            const { data } = await apiClient.get(`/segments`, { params })
+
+                                            return data.data.map((d: any) => ({
+                                                value: d._id,
+                                                label: d.name,
+                                            }))
+                                        }}
+                                        rules={[{ required: true }]}
+                                    />
+                                }
+
+                                if (audience === 'filtered') {
+                                    return (<>
+                                        <ProFormSelect
+                                            mode="multiple"
+                                            name="filters"
+                                            label="Filters"
+                                            options={segmentTypes}
+                                            rules={[{ required: true }]}
+                                        />
+
+                                        <ProFormDependency name={['filters']}>
+                                            {({ filters }) => (
+                                                filters?.map((filter: string, key: number) => (<>
+                                                    <ProFormItem name={['rules', key, 'type']} initialValue={filter} hidden />
+                                                    <ProFormItem name={['rules', key, 'operator']} initialValue="in" hidden />
+                                                    <ProFormItem name={['rules', key, 'condition']} initialValue="and" hidden />
+                                                    <ProFormSelect
+                                                        key={key}
+                                                        mode={attributeValues[filter] ? "multiple" : 'tags'}
+                                                        name={['rules', key, 'values']}
+                                                        label={segmentTypesByKeys[filter]}
+                                                        options={attributeValues[filter] ?? []}
+                                                        rules={[{ required: true }]}
+                                                    />
+                                                </>))
+                                            )}
+                                        </ProFormDependency>
+                                    </>)
+                                }
+
+                                if (audience === 'all') {
+                                    return <Alert
+                                        type="warning"
+                                        message="It will send to all active users in the list."
+                                        style={{ marginBottom: 10 }}
+                                    />
+                                }
+                            }}
+                        </ProFormDependency>
+                    </StepsForm.StepForm>
+                    <StepsForm.StepForm
+                        formRef={formComposeRef}
+                        requiredMark="optional"
+                        name="message"
+                        title="Message"
+                        stepProps={{ description: 'Compose your message' }}
+                    >
+                        <ProFormItem name={['flows']} hidden />
+
+                        <ProFormDependency name={['flows']}>
+                            {({ flows }) => {
+                                if (flows && flows.length) {
+                                    return <List
+                                        itemLayout="horizontal"
+                                        style={{ marginBottom: 10 }}
+                                        dataSource={flows}
+                                        renderItem={(item: AdItem, index) => {
+                                            let iconUrl = item.icon_type === 'custom' && item.icon_url ? item.icon_url : adImages[0]
+                                            return <List.Item
+                                                actions={[
+                                                    <Button
+                                                        shape="circle"
+                                                        size="small"
+                                                        icon={<EditOutlined />}
+                                                        onClick={() => {
+                                                            item._id = String(index)
+                                                            item.name = 'draft_ad'
+
+                                                            setModalAd(item)
+                                                        }}
+                                                    />,
+                                                ]}
+                                            >
+                                                <List.Item.Meta
+                                                    avatar={<Avatar src={iconUrl} />}
+                                                    title={item.title}
+                                                    description={item.content}
+                                                />
+                                            </List.Item>
+                                        }}
+                                    />
+                                }
+
+                                return <Button
+                                    style={{ marginBottom: 10 }}
+                                    type="dashed"
+                                    onClick={() => setModalAd({
+                                        name: `draft_ad`,
+                                        ad_type: searchParams.get('provider') ?? undefined
+                                    })}
+                                >Compose New Ad</Button>
+                            }}
+                        </ProFormDependency>
+                    </StepsForm.StepForm>
+                    <StepsForm.StepForm
+                        name="time"
+                        title="Send"
+                        stepProps={{ description: 'Schedule or Send' }}
+                    >
+                        <Form.Item label="Sending Time" name="trigger">
+                            <DatePicker
+                                disabledDate={(c) => c && c.unix() < dayjs().startOf('day').unix()}
+                                disabledTime={(c) => ({
+                                    disabledHours: () => c && c < dayjs() ? Array.from(Array(c.hour()).keys()) : [],
+                                    disabledMinutes: () => c && c < dayjs() ? Array.from(Array(c.minute() + 1).keys()) : [],
+                                })}
+                                showTime={{ format: 'HH:mm' }}
+                                format="YYYY-MM-DD HH:mm"
+                            />
+                        </Form.Item>
+                    </StepsForm.StepForm>
+                </StepsForm>
+            </Card>
+
+            <Modal
+                title="Ad Composer"
+                open={!!modalAd.name}
+                footer={null}
+                onCancel={() => setModalAd({})}
+            >
+                <AdComposer
+                    requiredMark="optional"
+                    request={async () => modalAd}
+                    hidename="yes"
+                    onFinish={async (fields) => {
+                        fields.time_type = 'minute'
+                        fields.type = 'custom'
+                        fields.time = 0
+
+                        formComposeRef.current?.setFieldValue(['flows', 0], fields)
+
+                        return setModalAd({})
+                    }}
+                />
+            </Modal>
+        </>
     )
 }
 
