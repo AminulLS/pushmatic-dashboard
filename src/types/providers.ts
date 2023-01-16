@@ -6,11 +6,11 @@ export interface Provider {
 
 export type ProviderBase = Provider
 
-export type ProviderWithConfig = Provider & {
+export type ProviderWithConfig = ProviderBase & {
     config?: { label: string, name: string }[]
 }
 
-export type ProviderOMXML = Provider & {
+export type ProviderOMXML = ProviderBase & {
     campaigns?: {
         [name: string]: {
             label: string,
@@ -21,8 +21,4 @@ export type ProviderOMXML = Provider & {
 
 export type ProviderItem = Provider & ProviderWithConfig & ProviderOMXML & {
     id?: string
-}
-
-export type ProviderCollection = {
-    [name: string]: ProviderItem
 }

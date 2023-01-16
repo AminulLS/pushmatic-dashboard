@@ -138,7 +138,9 @@ function Configuration() {
                                         <Form.Item
                                             name="fallback_url"
                                             label="Fallback URL"
-                                            extra={(<small>Available Tags: {userFields.join(', ')}</small>)}
+                                            extra={(
+                                                <small>Available Tags: {'{{' + userFields.join('}}, {{') + '}}'}</small>
+                                            )}
                                             rules={[{ type: 'url' }]}
                                         >
                                             <Input placeholder="Enter the fallback url..." />

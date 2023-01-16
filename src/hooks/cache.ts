@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { setCache } from '../redux/cache-reducer'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import type { ProviderCollection } from '../types/providers'
+import type { ProviderItem } from '../types/providers'
 import { useApiClient } from './api'
 
-export function useProviders(): ProviderCollection {
+export function useProviders(): { [name: string]: ProviderItem } {
     const providers = useAppSelector(({ cache }) => cache.providers)
     const client = useApiClient()
     const dispatch = useAppDispatch()

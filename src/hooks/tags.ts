@@ -63,6 +63,10 @@ export const useSegmentTypes = (): DefaultValue[] => [
         value: 'source'
     },
     {
+        label: 'User',
+        value: 'user'
+    },
+    {
         label: 'All Time Clicks',
         value: 'clicks_any'
     },
@@ -288,10 +292,40 @@ export const useAvailableAdminStatuses = (): DefaultValue[] => [
     }
 ]
 
+export const useAvailableCampaignTypes = (): DefaultValue[] => [
+    {
+        label: 'Onetime',
+        value: "onetime",
+    },
+    {
+        label: 'Scheduled',
+        value: 'scheduled',
+    },
+    {
+        label: 'Funnel',
+        value: "funnel",
+    },
+]
+
+export const useAvailableCampaignAudienceTypes = (): DefaultValue[] => [
+    {
+        label: 'All',
+        value: "all",
+    },
+    {
+        label: 'Segmented',
+        value: 'segmented',
+    },
+    {
+        label: 'Filtered',
+        value: "filtered",
+    },
+]
+
 export const useSuggestedKeywords = (): string[] => [
     'warehouse', 'retail', 'driver', 'customer support'
 ]
 
-export const useOnlyUserFields = () => [
-    '{{first_name}}', '{{last_name}}', '{{full_name}}', '{{email}}', '{{phone}}', '{{search}}', '{{location}}', '{{source}}',
+export const useOnlyUserFields = (): string[] => [
+    'first_name', 'last_name', 'full_name', 'email', 'phone', 'search', 'location', 'source',
 ]

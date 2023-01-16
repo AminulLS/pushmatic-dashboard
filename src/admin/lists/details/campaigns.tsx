@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, message, Popconfirm, Space } from 'antd'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Button, message, Popconfirm, Result, Space } from 'antd'
 import { ProTable } from '@ant-design/pro-components'
 import type { ProColumns } from '@ant-design/pro-components'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
@@ -8,12 +8,18 @@ import { useApiClient } from '../../../hooks/api'
 import { useAppSelector } from '../../../redux/hooks'
 import type { CampaignItem } from '../../../types/campaigns'
 import type { ListItem } from '../../../types/lists'
+import CampaignAdd from './campaign-add'
+import CampaignEdit from './campaign-edit'
+import CampaignView from './campaign-view'
 
 function Campaigns() {
     const list = useAppSelector<ListItem>(({ list }) => list.current)
     const apiClient = useApiClient()
     const navigate = useNavigate()
     const campaignsTable = useRef<any>()
+    const [searchParams] = useSearchParams()
+    const action = searchParams.get('action')
+
     const columns: ProColumns<CampaignItem>[] = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
         {
@@ -112,6 +118,22 @@ function Campaigns() {
             },
         },
     ]
+
+    if (action === 'add') {
+        return <CampaignAdd />
+    }
+
+    if (action === 'edit') {
+        return <CampaignEdit />
+    }
+
+    if (action === 'view') {
+        return <CampaignView />
+    }
+
+    if (action && action !== 'add' && action !== 'edit' && action !== 'view') {
+        return <Result status="warning" title="Invalid action." />
+    }
 
     return (
         <ProTable
