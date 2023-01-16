@@ -300,6 +300,7 @@ function CampaignAdd() {
                 open={!!modalAd.name}
                 footer={null}
                 onCancel={() => setModalAd({})}
+                destroyOnClose={true}
             >
                 <AdComposer
                     requiredMark="optional"

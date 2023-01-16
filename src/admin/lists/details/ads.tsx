@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import dayjs from 'dayjs'
-import {
-    Button, Space, Popconfirm, message, Form, Modal,
-    Input, Select, InputNumber, Radio, Image, Alert
-} from 'antd'
+import { Button, Space, Popconfirm, message, Modal } from 'antd'
 import { ProTable } from '@ant-design/pro-components'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import type { ProColumns } from '@ant-design/pro-components'
+import AdComposer from '../../../components/ad-composer'
 import { useApiClient } from '../../../hooks/api'
-import { useAdImages, useAdTags, useProviders } from '../../../hooks/cache'
-import { useProfileFields, useIconTypes } from '../../../hooks/tags'
+import { useProviders } from '../../../hooks/cache'
 import { useAppSelector } from '../../../redux/hooks'
 import type { AdItem } from '../../../types/ads'
 import type { ListItem } from '../../../types/lists'
@@ -18,47 +15,14 @@ function Ads() {
     const list = useAppSelector<ListItem>(({ list }) => list.current)
     const apiClient = useApiClient()
     const providers = useProviders()
-    const adTags = useAdTags()
-    const adImages = useAdImages()
-    const useIconType = useIconTypes()
+
     const adsTable = useRef<any>()
-    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [modalVisible, setModalVisible] = useState<boolean>(false)
     const [modalAd, setModalAd] = useState<AdItem>({})
-    const [adEditForm] = Form.useForm()
-    const adLink = Form.useWatch('ad_link', adEditForm)
-    const adLinkParams = Form.useWatch('ad_link_params', adEditForm)
-    const [adLinkPreview, setAdLinkPreview] = useState<string | null>(null)
-    const profileFields = useProfileFields()
 
     const handleModal = (record: AdItem) => {
         setModalAd(record)
-        adEditForm.setFieldsValue(record)
         setModalVisible(true)
-    }
-
-    const saveAd = (params: AdItem) => {
-        const fields = params
-        const id = modalAd._id
-        let endpoint = `/ads`
-        if (!id) {
-            fields.list_id = list._id
-        } else {
-            endpoint = `/ads/${id}`
-        }
-
-        return apiClient
-            .post(endpoint, fields)
-            .then(({ data }) => {
-                setModalVisible(false)
-                adEditForm.resetFields()
-                setModalAd({})
-                adsTable.current.reloadAndRest()
-
-                return message.success(data.message)
-            })
-            .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
-            .finally(() => setIsLoading(false))
     }
 
     const columns: ProColumns<AdItem>[] = [
@@ -173,21 +137,6 @@ function Ads() {
         },
     ]
 
-    useEffect(() => {
-        try {
-            const url = new URL(adLink)
-            const customParams = adLinkParams?.map((val: string) => [val, `{{${val}}}`]) ?? []
-            const params = new URLSearchParams([
-                ...Array.from(url.searchParams.entries()),
-                ...customParams,
-            ])
-
-            setAdLinkPreview(`${url.origin}${url.pathname}?${decodeURI(params.toString())}`)
-        } catch (_) {
-            setAdLinkPreview('')
-        }
-    }, [adLink, adLinkParams])
-
     return (
         <>
             <ProTable
@@ -214,107 +163,36 @@ function Ads() {
             />
 
             <Modal
-                title={modalAd ? `Ad Edit: ${modalAd.name}` : 'New Ad'}
+                title={modalAd._id ? `Ad Edit: ${modalAd.name}` : 'New Ad'}
                 open={modalVisible}
-                onOk={() => adEditForm.submit()}
-                okText={modalAd?._id ? 'Save Ad' : 'Create Ad'}
-                confirmLoading={isLoading}
-                onCancel={() => {
-                    adEditForm.resetFields()
-                    setModalAd({})
-                    setModalVisible(false)
-                }}
+                footer={null}
+                onCancel={() => setModalVisible(false)}
+                afterClose={() => setModalAd({})}
+                destroyOnClose={true}
             >
-                <Form
-                    form={adEditForm}
-                    layout="vertical"
+                <AdComposer
                     requiredMark="optional"
+                    request={async () => modalAd}
                     initialValues={{
                         icon_type: 'default',
                         cpc: 0.000
                     }}
-                    onFinish={saveAd}
-                >
-                    <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-                        <Input placeholder="Ad Name" />
-                    </Form.Item>
-                    <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-                        <Input placeholder="Ad Title" />
-                    </Form.Item>
-                    <Form.Item
-                        name="content" label="Content"
-                        rules={[{ required: true }]}
-                        extra={<small>Available Tags: {adTags.join(', ')}</small>}
-                    >
-                        <Input.TextArea placeholder="Ad Content" />
-                    </Form.Item>
-                    <Form.Item name="ad_type" label="Ad Type" rules={[{ required: true }]}>
-                        <Select showSearch placeholder="Select the ad type" options={Object.values(providers)} />
-                    </Form.Item>
-                    <Form.Item noStyle shouldUpdate={(a, b) => a.ad_type !== b.ad_type}>
-                        {({ getFieldValue }) => getFieldValue('ad_type') === 'directlink' ? (
-                            <>
-                                <Form.Item name="ad_link" label="Ad Link" rules={[{ required: true }, { type: 'url' }]}>
-                                    <Input placeholder="Enter the ad link..." />
-                                </Form.Item>
-                                <Form.Item
-                                    name="ad_link_params"
-                                    label="Params"
-                                    extra={(adLinkPreview &&
-                                        <Alert style={{ marginTop: 5 }} message={adLinkPreview} type="info" />)}
-                                >
-                                    <Select
-                                        mode="multiple"
-                                        allowClear
-                                        style={{ width: '100%' }}
-                                        placeholder="Please select params"
-                                        options={profileFields}
-                                    />
-                                </Form.Item>
-                            </>
-                        ) : null}
-                    </Form.Item>
-                    <Form.Item noStyle shouldUpdate={(a, b) => a.ad_type !== b.ad_type}>
-                        {({ getFieldValue }) => getFieldValue('ad_type') === 'omxml' ? (
-                            <>
-                                <Form.Item name={['config', 'campaign_ids']} label="Campaigns">
-                                    <Select
-                                        mode="multiple"
-                                        placeholder="Pick campaigns"
-                                        options={Object.values(providers.omxml?.campaigns || {})}
-                                    />
-                                </Form.Item>
-                                <Form.Item name={['config', 'exclude_campaign_ids']} label="Campaigns Exclude">
-                                    <Select
-                                        mode="multiple"
-                                        placeholder="Pick campaigns"
-                                        options={Object.values(providers.omxml?.campaigns || {})}
-                                    />
-                                </Form.Item>
-                            </>
-                        ) : null}
-                    </Form.Item>
-                    <Form.Item name="cpc" label="CPC" rules={[{ required: true }]}>
-                        <InputNumber min={0.00} step={0.001} placeholder="Ad CPC" />
-                    </Form.Item>
-                    <Form.Item name="icon_type" label="Icon Type" rules={[{ required: true }]}>
-                        <Select options={useIconType} placeholder="Select the icon type" />
-                    </Form.Item>
-                    <Form.Item noStyle shouldUpdate={(a, b) => a.icon_type !== b.icon_type}>
-                        {({ getFieldValue }) => getFieldValue('icon_type') === 'custom' ? (
-                            <Form.Item name="icon_url" label="Icon URL" rules={[{ required: true }, { type: 'url' }]}>
-                                <Radio.Group options={adImages && adImages?.map(img => {
-                                    return {
-                                        value: img,
-                                        label: (
-                                            <Image src={img} preview={false} width={32} style={{ margin: '2px 0' }} />
-                                        ),
-                                    }
-                                })} />
-                            </Form.Item>
-                        ) : null}
-                    </Form.Item>
-                </Form>
+                    onFinish={async (fields) => {
+                        fields.list_id = list._id
+                        const endpoint = !modalAd._id ? `/ads` : `/ads/${modalAd._id}`
+
+                        return apiClient
+                            .post(endpoint, fields)
+                            .then(({ data }) => {
+                                setModalVisible(false)
+                                setModalAd({})
+                                adsTable.current.reloadAndRest()
+
+                                return message.success(data.message)
+                            })
+                            .catch(err => message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message))
+                    }}
+                />
             </Modal>
         </>
     )
