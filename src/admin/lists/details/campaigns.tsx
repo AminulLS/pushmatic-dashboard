@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button, message, Popconfirm, Result, Space } from 'antd'
 import { ProTable } from '@ant-design/pro-components'
 import type { ProColumns } from '@ant-design/pro-components'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { useApiClient } from '../../../hooks/api'
 import { useAppSelector } from '../../../redux/hooks'
 import type { CampaignItem } from '../../../types/campaigns'
@@ -174,6 +174,9 @@ function Campaigns() {
 
                 return apiClient.get(`/campaigns?${qs}`).then(({ data }) => data)
             }}
+            toolBarRender={() => [
+                <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate(`/admin/lists/${list._id}/campaigns?action=add`)} />
+            ]}
         />
     )
 }
