@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
     Alert, Avatar, Button, Card, DatePicker, Form, List, message, Modal
 } from 'antd'
@@ -32,6 +32,7 @@ import type { ListItem } from '../../../types/lists'
 function CampaignAdd() {
     const [searchParams] = useSearchParams()
     const list = useAppSelector<ListItem>(({ list }) => list.current)
+    const navigate = useNavigate()
     const segmentTypes = useSegmentTypes()
     const apiClient = useApiClient()
     const formBasicRef = useRef<ProFormInstance>()
@@ -93,7 +94,11 @@ function CampaignAdd() {
 
                         return await apiClient
                             .post('/campaigns', params)
-                            .then(({ data }) => message.success(data.message))
+                            .then(async ({ data }) => {
+                                await message.success(data.message)
+
+                                return navigate(`/admin/lists/${list._id}/campaigns`)
+                            })
                             .catch(async err => {
                                 await message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message)
 
@@ -132,7 +137,7 @@ function CampaignAdd() {
                         name="checkbox"
                         title="Audience"
                         requiredMark="optional"
-                        stepProps={{ description: 'Filters your audience', }}
+                        stepProps={{ description: 'Filters your audience' }}
                     >
                         <ProFormRadio.Group
                             name="audience"
@@ -211,6 +216,17 @@ function CampaignAdd() {
                         name="message"
                         title="Message"
                         stepProps={{ description: 'Compose your message' }}
+                        onFinish={async () => {
+                            const values = formComposeRef.current?.getFieldValue('flows')
+
+                            if (!values || values.length <= 0) {
+                                await message.error('Please create at least one ad to continue.')
+
+                                return false
+                            }
+
+                            return true
+                        }}
                     >
                         <ProFormItem name={['flows']} hidden />
 
