@@ -8,8 +8,7 @@ import { useApiClient } from '../../../hooks/api'
 import { useAppSelector } from '../../../redux/hooks'
 import type { CampaignItem } from '../../../types/campaigns'
 import type { ListItem } from '../../../types/lists'
-import CampaignAdd from './campaign-add'
-import CampaignEdit from './campaign-edit'
+import CampaignBuilder from './campaign-builder'
 import CampaignView from './campaign-view'
 
 function Campaigns() {
@@ -114,7 +113,9 @@ function Campaigns() {
                             size="small"
                             shape="circle"
                             icon={<EditOutlined />}
-                            onClick={() => navigate(`/admin/lists/${list._id}/campaigns?action=edit&id=${record._id}`)}
+                            onClick={() => navigate(`/admin/lists/${list._id}/campaigns?action=edit&id=${record._id}`, {
+                                state: { campaign: record }
+                            })}
                         />
                         <Popconfirm
                             title="Are you sure delete this campaign?"
@@ -145,12 +146,8 @@ function Campaigns() {
         },
     ]
 
-    if (action === 'add') {
-        return <CampaignAdd />
-    }
-
-    if (action === 'edit') {
-        return <CampaignEdit />
+    if (action === 'add' || action === 'edit') {
+        return <CampaignBuilder />
     }
 
     if (action === 'view') {
@@ -175,7 +172,11 @@ function Campaigns() {
                 return apiClient.get(`/campaigns?${qs}`).then(({ data }) => data)
             }}
             toolBarRender={() => [
-                <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate(`/admin/lists/${list._id}/campaigns?action=add`)} />
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={() => navigate(`/admin/lists/${list._id}/campaigns?action=add`)}
+                />
             ]}
         />
     )

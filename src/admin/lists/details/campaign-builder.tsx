@@ -1,16 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Alert, Avatar, Button, Card, DatePicker, Form, List, message, Modal } from 'antd'
 import {
-    Alert, Avatar, Button, Card, DatePicker, Form, List, message, Modal
-} from 'antd'
-import {
-    ProFormSelect,
-    ProFormText,
-    ProFormTextArea,
-    StepsForm,
-    ProFormDependency,
-    ProFormRadio, ProFormItem
+    ProFormSelect, ProFormText, ProFormTextArea, StepsForm, ProFormDependency, ProFormRadio, ProFormItem
 } from '@ant-design/pro-components'
 import { EditOutlined } from '@ant-design/icons'
 import type { ProFormInstance } from '@ant-design/pro-components'
@@ -27,30 +20,37 @@ import {
 } from '../../../hooks/tags'
 import { useAppSelector } from '../../../redux/hooks'
 import type { AdItem } from '../../../types/ads'
+import { CampaignItem } from '../../../types/campaigns'
 import type { ListItem } from '../../../types/lists'
 
-function CampaignAdd() {
+function CampaignBuilder() {
     const [searchParams] = useSearchParams()
     const list = useAppSelector<ListItem>(({ list }) => list.current)
-    const navigate = useNavigate()
-    const segmentTypes = useSegmentTypes()
-    const apiClient = useApiClient()
+    const [modalAd, setModalAd] = useState<AdItem>({})
+    const [campaign, setCampaign] = useState<CampaignItem>()
     const formBasicRef = useRef<ProFormInstance>()
     const formFiltersRef = useRef<ProFormInstance>()
     const formComposeRef = useRef<ProFormInstance>()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const segmentTypes = useSegmentTypes()
+    const apiClient = useApiClient()
     const segmentBrowsers = useSegmentBrowser()
     const segmentDevices = useSegmentDevice()
     const segmentOSes = useSegmentOs()
     const campaignTypes = useAvailableCampaignTypes()
     const audienceTypes = useAvailableCampaignAudienceTypes()
     const adImages = useAdImages()
-    const [modalAd, setModalAd] = useState<AdItem>({})
+    // const campaign = location?.state?.campaign
+
+    useEffect(() => {
+        setCampaign(location?.state?.campaign)
+    }, [location])
 
     const segmentTypesByKeys: { [p: string]: string } = segmentTypes.reduce((obj, cur) => ({
         ...obj,
         [cur.value]: cur.label
     }), {})
-
     const attributeValues: { [name: string]: any } = {
         browser: segmentBrowsers,
         device: segmentDevices,
@@ -59,6 +59,10 @@ function CampaignAdd() {
 
 
     useEffect(() => {
+        if (campaign?._id) {
+            return
+        }
+
         const allowedTypes = campaignTypes.map(({ value }) => value)
         const campaignType = searchParams.get('type')
 
@@ -78,11 +82,10 @@ function CampaignAdd() {
 
         const allowedAudience = audienceTypes.map(({ value }) => value)
         const audienceType = searchParams.get('audience')
-
         if (audienceType && allowedAudience.indexOf(audienceType) !== -1) {
             formFiltersRef.current?.setFieldValue('audience', audienceType)
         }
-    }, [searchParams, segmentTypes, campaignTypes, audienceTypes])
+    }, [searchParams, segmentTypes, campaignTypes, audienceTypes, campaign])
 
     return (
         <>
@@ -321,4 +324,4 @@ function CampaignAdd() {
     )
 }
 
-export default CampaignAdd
+export default CampaignBuilder
