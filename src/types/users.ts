@@ -17,7 +17,6 @@ export interface User {
     chnl2?: string
     chnl3?: string
     user_ip?: string
-
     user_ip_status?: 'real' | 'fake' | 'requested' | 'customized'
     status?: 'subscribed' | 'unsubscribed'
     created_at?: string
