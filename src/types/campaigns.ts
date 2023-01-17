@@ -1,4 +1,5 @@
-import { AdItem } from './ads'
+import type { AdItem } from './ads'
+import type { SegmentRuleItem } from './segments'
 
 export interface CampaignMessage extends AdItem {
     time?: number
@@ -18,6 +19,7 @@ export interface Campaign {
     processor?: string
     status?: string
     flows?: CampaignMessageItem[]
+    rules?: SegmentRuleItem[]
     created_at?: string
     updated_at?: string
 }
