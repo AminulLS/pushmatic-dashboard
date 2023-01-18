@@ -54,26 +54,24 @@ function AdComposer(props: AdComposerProps) {
             options={Object.values(providers).map(({ label, value }) => ({ label, value }))}
             rules={[{ required: true }]}
         />
-        <ProFormText
-            name="keyword"
-            label="Keyword"
-            placeholder="To override user search keyword..."
-        />
+        <ProFormDependency name={['ad_type']}>
+            {({ ad_type }) => (ad_type && ad_type !== 'directlink') && <ProFormText
+                name="keyword"
+                label="Keyword"
+                placeholder="To override user search keyword..."
+            />}
+        </ProFormDependency>
+
+        <ProFormDependency name={['ad_type']}>
+            {({ ad_type }) => (ad_type && ['talent', 'omxml'].indexOf(ad_type) !== -1) && <ProFormDigit
+                name="cpc"
+                label="CPC"
+                fieldProps={{ step: 0.001 }}
+                min={0.00}
+            />}
+        </ProFormDependency>
         <ProFormDependency name={['ad_type', 'ad_link', 'ad_link_params']}>
             {(fields) => {
-                const cpc = <ProFormDigit
-                    name="cpc"
-                    label="CPC"
-                    fieldProps={{
-                        step: 0.001
-                    }}
-                    min={0.00}
-                />
-
-                if (fields.ad_type === 'talent') {
-                    return cpc
-                }
-
                 // if provider is operation media
                 if (fields.ad_type === 'omxml') {
                     return <>
@@ -92,7 +90,6 @@ function AdComposer(props: AdComposerProps) {
                             mode="multiple"
                             options={Object.values(providers.omxml?.campaigns || {})}
                         />
-                        {cpc}
                     </>
                 }
 
@@ -119,8 +116,6 @@ function AdComposer(props: AdComposerProps) {
                         />
                     </>
                 }
-
-                return
             }}
         </ProFormDependency>
         <ProFormRadio.Group
