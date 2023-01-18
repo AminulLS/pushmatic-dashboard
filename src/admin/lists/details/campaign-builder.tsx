@@ -1,9 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Alert, Avatar, Button, Card, DatePicker, Form, List, message, Modal } from 'antd'
+import { Alert, Avatar, Button, Card, List, message, Modal } from 'antd'
 import {
-    ProFormSelect, ProFormText, ProFormTextArea, StepsForm, ProFormDependency, ProFormRadio, ProFormItem
+    ProFormSelect,
+    ProFormText,
+    ProFormTextArea,
+    StepsForm,
+    ProFormDependency,
+    ProFormRadio,
+    ProFormItem,
+    ProFormDateTimePicker
 } from '@ant-design/pro-components'
 import { EditOutlined } from '@ant-design/icons'
 import type { ProFormInstance } from '@ant-design/pro-components'
@@ -31,6 +38,7 @@ function CampaignBuilder() {
     const formBasicRef = useRef<ProFormInstance>()
     const formFiltersRef = useRef<ProFormInstance>()
     const formComposeRef = useRef<ProFormInstance>()
+    const formSendRef = useRef<ProFormInstance>()
     const navigate = useNavigate()
     const location = useLocation()
     const segmentTypes = useSegmentTypes()
@@ -41,11 +49,24 @@ function CampaignBuilder() {
     const campaignTypes = useAvailableCampaignTypes()
     const audienceTypes = useAvailableCampaignAudienceTypes()
     const adImages = useAdImages()
-    // const campaign = location?.state?.campaign
 
     useEffect(() => {
         setCampaign(location?.state?.campaign)
     }, [location])
+
+    // if it is editing mode.
+    useEffect(() => {
+        if (!campaign?._id) {
+            return
+        }
+
+        const formCampaign: any = campaign ?? {}
+        formCampaign.filters = Object.values(campaign?.rules || {}).map(({ type }) => type)
+        formBasicRef.current?.setFieldsValue(formCampaign)
+        formFiltersRef.current?.setFieldsValue(formCampaign)
+        formComposeRef.current?.setFieldsValue(formCampaign)
+        formSendRef.current?.setFieldsValue(campaign) // TODO: fix date error first.
+    }, [campaign])
 
     const segmentTypesByKeys: { [p: string]: string } = segmentTypes.reduce((obj, cur) => ({
         ...obj,
@@ -58,6 +79,7 @@ function CampaignBuilder() {
     }
 
 
+    // if mode is not editing, get values from search params.
     useEffect(() => {
         if (campaign?._id) {
             return
@@ -89,14 +111,15 @@ function CampaignBuilder() {
 
     return (
         <>
-            <Card title="Create Campaign">
+            <Card title={campaign?._id ? `Editing Campaign: ${campaign.name}` : 'Create Campaign'}>
                 <StepsForm
                     onFinish={async (params) => {
                         params.list_id = list._id
                         params.filters = undefined
 
-                        return await apiClient
-                            .post('/campaigns', params)
+                        const endpoint = campaign?._id ? `/campaigns/${campaign?._id}` : `/campaigns/`
+
+                        return await apiClient.post(endpoint, params)
                             .then(async ({ data }) => {
                                 await message.success(data.message)
 
@@ -279,21 +302,26 @@ function CampaignBuilder() {
                         </ProFormDependency>
                     </StepsForm.StepForm>
                     <StepsForm.StepForm
-                        name="time"
                         title="Send"
+                        name="time"
+                        formRef={formSendRef}
+                        requiredMark="optional"
                         stepProps={{ description: 'Schedule or Send' }}
                     >
-                        <Form.Item label="Sending Time" name="trigger">
-                            <DatePicker
-                                disabledDate={(c) => c && c.unix() < dayjs().startOf('day').unix()}
-                                disabledTime={(c) => ({
+                        <ProFormDateTimePicker
+                            label="Sending Time"
+                            name="trigger"
+                            rules={[{ required: true }]}
+                            fieldProps={{
+                                disabledDate: (c: any) => c && c.unix() < dayjs().startOf('day').unix(),
+                                disabledTime: (c: any) => ({
                                     disabledHours: () => c && c < dayjs() ? Array.from(Array(c.hour()).keys()) : [],
                                     disabledMinutes: () => c && c < dayjs() ? Array.from(Array(c.minute() + 1).keys()) : [],
-                                })}
-                                showTime={{ format: 'HH:mm' }}
-                                format="YYYY-MM-DD HH:mm"
-                            />
-                        </Form.Item>
+                                }),
+                                showTime: { format: 'HH:mm' },
+                                format: "YYYY-MM-DD HH:mm"
+                            }}
+                        />
                     </StepsForm.StepForm>
                 </StepsForm>
             </Card>
