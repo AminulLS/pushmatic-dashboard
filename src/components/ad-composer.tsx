@@ -23,10 +23,9 @@ function AdComposer(props: AdComposerProps) {
     const adImages = useAdImages()
     const userFields = useOnlyUserFields()
     const iconTypes = useIconTypes()
-    const { hidename } = props
+    const { hidename, ...rest } = props
 
-
-    return <ProForm {...props}>
+    return <ProForm {...rest}>
         {hidename !== 'yes' ? <ProFormText
             name="name"
             label="Name"
