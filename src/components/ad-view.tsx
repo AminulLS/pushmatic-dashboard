@@ -9,15 +9,13 @@ const AdView: React.FC<{ ad: AdItem } & CardProps> = ({ ad, ...rest }) => {
     const adImages = useAdImages()
     const iconUrl = ad?.icon_type === 'custom' && ad?.icon_url ? ad.icon_url : adImages[Math.floor(Math.random() * adImages.length)]
 
-    return <Card title={ad?.title} {...rest}>
-        <Space className="ad-view">
-            <Image className="ad-view--image" src={iconUrl} width={64} preview={false} />
-            <div className="ad-view--body">
-                <p className="ad-view--title">{ad?.title || 'No Title'}</p>
-                <p className="ad-view--content">{ad?.content || 'No Content'}</p>
-            </div>
-        </Space>
-    </Card>
+    return <Space className="ad-view" size="small">
+        <Image className="ad-view--image" src={iconUrl} width={64} preview={false} />
+        <div className="ad-view--body">
+            <p className="ad-view--title">{ad?.title || 'No Title'}</p>
+            <p className="ad-view--content">{ad?.content || 'No Content'}</p>
+        </div>
+    </Space>
 }
 
 export default AdView

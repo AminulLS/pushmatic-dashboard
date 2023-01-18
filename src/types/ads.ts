@@ -21,3 +21,9 @@ export interface Ad {
 }
 
 export type AdItem = Ad
+
+export type FlowItem = {
+    time?: number,
+    time_type?: 'minute' | 'hour' | 'day',
+    type?: 'predefined' | 'custom',
+} & Ad

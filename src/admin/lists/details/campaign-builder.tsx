@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Alert, Avatar, Button, Card, List, message, Modal } from 'antd'
+import { Alert, Badge, Button, Card, message, Modal, Popconfirm, Space, Tag, Timeline } from 'antd'
 import {
     ProFormSelect,
     ProFormText,
@@ -12,11 +12,11 @@ import {
     ProFormItem,
     ProFormDateTimePicker
 } from '@ant-design/pro-components'
-import { EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import type { ProFormInstance } from '@ant-design/pro-components'
 import AdComposer from '../../../components/ad-composer'
+import AdView from '../../../components/ad-view'
 import { useApiClient } from '../../../hooks/api'
-import { useAdImages } from '../../../hooks/cache'
 import {
     useAvailableCampaignAudienceTypes,
     useAvailableCampaignTypes,
@@ -26,14 +26,15 @@ import {
     useSegmentTypes
 } from '../../../hooks/tags'
 import { useAppSelector } from '../../../redux/hooks'
-import type { AdItem } from '../../../types/ads'
-import { CampaignItem } from '../../../types/campaigns'
+import type { FlowItem } from '../../../types/ads'
+import type { CampaignItem } from '../../../types/campaigns'
 import type { ListItem } from '../../../types/lists'
 
 function CampaignBuilder() {
     const [searchParams] = useSearchParams()
     const list = useAppSelector<ListItem>(({ list }) => list.current)
-    const [modalAd, setModalAd] = useState<AdItem>({})
+    const [modalAd, setModalAd] = useState<FlowItem>()
+    const [modalAdId, setModalAdId] = useState<number | undefined>()
     const [campaign, setCampaign] = useState<CampaignItem>()
     const formBasicRef = useRef<ProFormInstance>()
     const formFiltersRef = useRef<ProFormInstance>()
@@ -48,7 +49,6 @@ function CampaignBuilder() {
     const segmentOSes = useSegmentOs()
     const campaignTypes = useAvailableCampaignTypes()
     const audienceTypes = useAvailableCampaignAudienceTypes()
-    const adImages = useAdImages()
 
     useEffect(() => {
         setCampaign(location?.state?.campaign)
@@ -65,7 +65,7 @@ function CampaignBuilder() {
         formBasicRef.current?.setFieldsValue(formCampaign)
         formFiltersRef.current?.setFieldsValue(formCampaign)
         formComposeRef.current?.setFieldsValue(formCampaign)
-        formSendRef.current?.setFieldsValue(campaign) // TODO: fix date error first.
+        formSendRef.current?.setFieldsValue(campaign)
     }, [campaign])
 
     const segmentTypesByKeys: { [p: string]: string } = segmentTypes.reduce((obj, cur) => ({
@@ -123,7 +123,7 @@ function CampaignBuilder() {
                             .then(async ({ data }) => {
                                 await message.success(data.message)
 
-                                return navigate(`/admin/lists/${list._id}/campaigns`)
+                                return navigate(`/admin/lists/${list._id}/campaigns`, { state: { campaign: undefined } })
                             })
                             .catch(async err => {
                                 await message.error((err?.response?.data?.message ?? err?.response?.statusText) ?? err.message)
@@ -257,48 +257,54 @@ function CampaignBuilder() {
                         <ProFormItem name={['flows']} hidden />
 
                         <ProFormDependency name={['flows']}>
-                            {({ flows }) => {
-                                if (flows && flows.length) {
-                                    return <List
-                                        itemLayout="horizontal"
-                                        style={{ marginBottom: 10 }}
-                                        dataSource={flows}
-                                        renderItem={(item: AdItem, index) => {
-                                            let iconUrl = item.icon_type === 'custom' && item.icon_url ? item.icon_url : adImages[0]
-                                            return <List.Item
-                                                actions={[
-                                                    <Button
-                                                        shape="circle"
-                                                        size="small"
-                                                        icon={<EditOutlined />}
-                                                        onClick={() => {
-                                                            item._id = String(index)
-                                                            item.name = 'draft_ad'
+                            {({ flows }) => (<Timeline mode="left">
+                                {flows && flows.length && flows.map((ad: FlowItem, idx: number) => <Timeline.Item
+                                    key={idx}
+                                    dot={(
+                                        <Button shape="circle" size="small" type="dashed">{idx + 1}</Button>
+                                    )}
+                                >
+                                    <Card
+                                        size="small"
+                                        title={<>After<b> {ad.time} </b>{ad.time_type}</>}
+                                        extra={<>
+                                            <Button
+                                                shape="circle"
+                                                size="small"
+                                                icon={<EditOutlined />}
+                                                onClick={() => {
+                                                    setModalAd(ad)
+                                                    setModalAdId(idx)
+                                                }}
+                                            />
+                                            <Popconfirm
+                                                title="Delete this ad?"
+                                                onConfirm={() => {
+                                                    const flows = formComposeRef
+                                                        .current?.getFieldValue('flows')
+                                                        .filter((_: FlowItem, i: number) => i !== idx)
 
-                                                            setModalAd(item)
-                                                        }}
-                                                    />,
-                                                ]}
+                                                    formComposeRef.current?.setFieldValue('flows', flows)
+                                                }}
                                             >
-                                                <List.Item.Meta
-                                                    avatar={<Avatar src={iconUrl} />}
-                                                    title={item.title}
-                                                    description={item.content}
+                                                <Button
+                                                    shape="circle"
+                                                    size="small"
+                                                    danger={true}
+                                                    icon={<DeleteOutlined />}
                                                 />
-                                            </List.Item>
-                                        }}
+                                            </Popconfirm>
+                                        </>}
+                                        children={<AdView ad={ad} />}
                                     />
-                                }
-
-                                return <Button
-                                    style={{ marginBottom: 10 }}
-                                    type="dashed"
-                                    onClick={() => setModalAd({
-                                        name: `draft_ad`,
-                                        ad_type: searchParams.get('provider') ?? undefined
-                                    })}
-                                >Compose New Ad</Button>
-                            }}
+                                </Timeline.Item>)}
+                                <Timeline.Item>
+                                    <Button
+                                        onClick={() => setModalAd({})}
+                                        icon={<PlusOutlined />}
+                                    >Compose New Ad</Button>
+                                </Timeline.Item>
+                            </Timeline>)}
                         </ProFormDependency>
                     </StepsForm.StepForm>
                     <StepsForm.StepForm
@@ -328,23 +334,32 @@ function CampaignBuilder() {
 
             <Modal
                 title="Ad Composer"
-                open={!!modalAd.name}
+                open={!!modalAd}
                 footer={null}
-                onCancel={() => setModalAd({})}
+                onCancel={() => setModalAd(undefined)}
                 destroyOnClose={true}
             >
                 <AdComposer
                     requiredMark="optional"
-                    request={async () => modalAd}
+                    request={async () => modalAd ?? {}}
                     hidename="yes"
-                    onFinish={async (fields) => {
+                    onFinish={async (fields: FlowItem) => {
                         fields.time_type = 'minute'
                         fields.type = 'custom'
                         fields.time = 0
 
-                        formComposeRef.current?.setFieldValue(['flows', 0], fields)
+                        let flows = formComposeRef.current?.getFieldValue('flows') ?? []
 
-                        return setModalAd({})
+                        if (modalAdId === undefined) {
+                            flows.push(fields)
+                        } else {
+                            flows[modalAdId] = fields
+                        }
+
+                        formComposeRef.current?.setFieldValue('flows', flows)
+
+                        setModalAd(undefined)
+                        setModalAdId(undefined)
                     }}
                 />
             </Modal>
