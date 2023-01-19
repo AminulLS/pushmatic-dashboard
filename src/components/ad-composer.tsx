@@ -14,7 +14,7 @@ import { useIconTypes, useOnlyUserFields } from '../hooks/tags'
 import { appendSearchParams } from '../utils/urls'
 
 type AdComposerProps = {
-    hidename?: 'yes'
+    hideName?: boolean
 } & ProFormProps
 
 function AdComposer(props: AdComposerProps) {
@@ -23,10 +23,10 @@ function AdComposer(props: AdComposerProps) {
     const adImages = useAdImages()
     const userFields = useOnlyUserFields()
     const iconTypes = useIconTypes()
-    const { hidename, ...rest } = props
+    const { hideName, ...rest } = props
 
     return <ProForm {...rest}>
-        {hidename !== 'yes' ? <ProFormText
+        {!hideName ? <ProFormText
             name="name"
             label="Name"
             tooltip="This should be lowercase and unique for the list"
