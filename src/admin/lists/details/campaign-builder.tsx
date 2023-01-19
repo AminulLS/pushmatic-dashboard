@@ -20,7 +20,7 @@ import {
     useSegmentTypes
 } from '../../../hooks/tags'
 import { useAppSelector } from '../../../redux/hooks'
-import type { FlowItem } from '../../../types/ads'
+import type { AdItem, FlowItem } from '../../../types/ads'
 import type { CampaignItem } from '../../../types/campaigns'
 import type { ListItem } from '../../../types/lists'
 
@@ -400,10 +400,21 @@ function CampaignBuilder() {
                         rules={[{ required: true }]}
                     />
 
-                    {modalAd?.type === 'predefined' && <ProFormText
+                    {modalAd?.type === 'predefined' && <ProFormSelect
                         name="name"
                         label="Ad Name"
-                        placeholder="Enter the ad name or prefix."
+                        placeholder="Please select a ad."
+                        request={async () => {
+                            const params = {
+                                list_id: list._id,
+                                pageSize: 100,
+                            }
+
+                            return apiClient.get('/ads', { params }).then(({ data }) => data.data.map((ad: AdItem) => ({
+                                label: ad.name,
+                                value: ad.name
+                            })))
+                        }}
                         rules={[{ required: true }]}
                     />}
                 </ProForm>
