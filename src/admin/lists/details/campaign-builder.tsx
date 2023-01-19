@@ -1,16 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { Alert, Badge, Button, Card, message, Modal, Popconfirm, Space, Tag, Timeline } from 'antd'
+import { Alert, Button, Card, message, Modal, Popconfirm, Space, Timeline } from 'antd'
 import {
-    ProFormSelect,
-    ProFormText,
-    ProFormTextArea,
-    StepsForm,
-    ProFormDependency,
-    ProFormRadio,
-    ProFormItem,
-    ProFormDateTimePicker
+    ProFormSelect, ProFormText, ProFormTextArea, StepsForm, ProFormDependency, ProFormRadio,
+    ProFormItem, ProFormDateTimePicker, ProForm, ProFormSegmented, ProFormDigit
 } from '@ant-design/pro-components'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import type { ProFormInstance } from '@ant-design/pro-components'
@@ -40,6 +34,8 @@ function CampaignBuilder() {
     const formFiltersRef = useRef<ProFormInstance>()
     const formComposeRef = useRef<ProFormInstance>()
     const formSendRef = useRef<ProFormInstance>()
+    const formAdRef = useRef<ProFormInstance>()
+    const formAdConfigRef = useRef<ProFormInstance>()
     const navigate = useNavigate()
     const location = useLocation()
     const segmentTypes = useSegmentTypes()
@@ -295,12 +291,17 @@ function CampaignBuilder() {
                                                 />
                                             </Popconfirm>
                                         </>}
-                                        children={<AdView ad={ad} />}
+                                        children={ad.type === 'predefined' ? `Predefined ad: ${ad.name}` :
+                                            <AdView ad={ad} />}
                                     />
                                 </Timeline.Item>)}
                                 <Timeline.Item>
                                     <Button
-                                        onClick={() => setModalAd({})}
+                                        onClick={() => setModalAd({
+                                            time: 1,
+                                            time_type: 'minute',
+                                            type: 'custom'
+                                        })}
                                         icon={<PlusOutlined />}
                                     >Compose New Ad</Button>
                                 </Timeline.Item>
@@ -335,33 +336,86 @@ function CampaignBuilder() {
             <Modal
                 title="Ad Composer"
                 open={!!modalAd}
-                footer={null}
-                onCancel={() => setModalAd(undefined)}
+                onCancel={() => {
+                    setModalAd(undefined)
+                }}
                 destroyOnClose={true}
+                okText="Save Ad"
+                onOk={() => {
+                    const adConfig = formAdConfigRef.current?.validateFields()
+                    const adFields = formAdRef.current?.validateFields()
+
+                    return Promise
+                        .all([adConfig, adFields])
+                        .then(() => {
+                            const flows = formComposeRef.current?.getFieldValue('flows') ?? []
+
+                            if (modalAdId === undefined) {
+                                flows.push(modalAd)
+                            } else {
+                                flows[modalAdId] = modalAd
+                            }
+
+                            formComposeRef.current?.setFieldValue('flows', flows)
+
+                            setModalAd(undefined)
+                            setModalAdId(undefined)
+                        })
+                        .catch(_ => false)
+                }}
             >
-                <AdComposer
+                <ProForm
                     requiredMark="optional"
                     request={async () => modalAd ?? {}}
-                    hidename="yes"
-                    onFinish={async (fields: FlowItem) => {
-                        fields.time_type = 'minute'
-                        fields.type = 'custom'
-                        fields.time = 0
+                    onValuesChange={(values) => setModalAd({ ...modalAd, ...values })}
+                    formRef={formAdConfigRef}
+                    submitter={{ render: () => null }}
+                >
+                    <Space align="center">
+                        <ProFormText placeholder="Send it after" disabled />
+                        <ProFormDigit
+                            name="time"
+                            fieldProps={{ step: 1 }}
+                            min={1}
+                            rules={[{ required: true }]}
+                        />
+                        <ProFormSelect
+                            name="time_type"
+                            allowClear={false}
+                            options={[
+                                { label: 'Minute', value: 'minute' },
+                                { label: 'Hour', value: 'hour' },
+                                { label: 'Day', value: 'Day' }
+                            ]}
+                            rules={[{ required: true }]}
+                        />
+                    </Space>
+                    <ProFormSegmented
+                        name="type"
+                        label="Ad Type"
+                        valueEnum={{
+                            predefined: 'Predefined',
+                            custom: 'Custom',
+                        }}
+                        rules={[{ required: true }]}
+                    />
 
-                        let flows = formComposeRef.current?.getFieldValue('flows') ?? []
+                    {modalAd?.type === 'predefined' && <ProFormText
+                        name="name"
+                        label="Ad Name"
+                        placeholder="Enter the ad name or prefix."
+                        rules={[{ required: true }]}
+                    />}
+                </ProForm>
 
-                        if (modalAdId === undefined) {
-                            flows.push(fields)
-                        } else {
-                            flows[modalAdId] = fields
-                        }
-
-                        formComposeRef.current?.setFieldValue('flows', flows)
-
-                        setModalAd(undefined)
-                        setModalAdId(undefined)
-                    }}
-                />
+                {modalAd?.type !== 'predefined' && <AdComposer
+                    formRef={formAdRef}
+                    requiredMark="optional"
+                    request={async () => modalAd ?? {}}
+                    hideName={true}
+                    onValuesChange={(values) => setModalAd({ ...modalAd, ...values })}
+                    submitter={{ render: () => null }}
+                />}
             </Modal>
         </>
     )
