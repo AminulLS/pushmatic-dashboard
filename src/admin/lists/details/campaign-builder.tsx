@@ -377,6 +377,7 @@ function CampaignBuilder() {
                             name="time"
                             fieldProps={{ step: 1 }}
                             min={1}
+                            max={59} // hard limit, see time_type disabled values.
                             rules={[{ required: true }]}
                         />
                         <ProFormSelect
@@ -384,8 +385,8 @@ function CampaignBuilder() {
                             allowClear={false}
                             options={[
                                 { label: 'Minute', value: 'minute' },
-                                { label: 'Hour', value: 'hour' },
-                                { label: 'Day', value: 'Day' }
+                                { label: 'Hour', value: 'hour', disabled: true },
+                                { label: 'Day', value: 'Day', disabled: true }
                             ]}
                             rules={[{ required: true }]}
                         />
