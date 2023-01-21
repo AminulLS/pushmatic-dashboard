@@ -7,7 +7,7 @@ import {
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { useApiClient } from '../../../hooks/api'
 import { useProviders } from '../../../hooks/cache'
-import { useAvailableDays, useGeneratedTimesOfDays, useOnlyUserFields, useSuggestedKeywords } from '../../../hooks/tags'
+import { useAvailableDays, useGeneratedTimesOfDays, useProfileFields, useSuggestedKeywords } from '../../../hooks/tags'
 import { useAppSelector } from '../../../redux/hooks'
 import type { AdminItem } from '../../../types/admins'
 import type { ListItem } from '../../../types/lists'
@@ -27,7 +27,7 @@ function Configuration() {
     const providers = useProviders()
     const suggestedKeywords = useSuggestedKeywords()
     const generatedTimesOfDays = useGeneratedTimesOfDays()
-    const userFields = useOnlyUserFields()
+    const userFields = useProfileFields()
     const availableDays = useAvailableDays()
     const apiClient = useApiClient()
     const [configForm] = Form.useForm()
@@ -139,7 +139,7 @@ function Configuration() {
                                             name="fallback_url"
                                             label="Fallback URL"
                                             extra={(
-                                                <small>Available Tags: {'{{' + userFields.join('}}, {{') + '}}'}</small>
+                                                <small>Available Tags: {'{{' + userFields.map(({ value }) => value).join('}}, {{') + '}}'}</small>
                                             )}
                                             rules={[{ type: 'url' }]}
                                         >

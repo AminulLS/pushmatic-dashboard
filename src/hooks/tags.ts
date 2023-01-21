@@ -325,7 +325,3 @@ export const useAvailableCampaignAudienceTypes = (): DefaultValue[] => [
 export const useSuggestedKeywords = (): string[] => [
     'warehouse', 'retail', 'driver', 'customer support'
 ]
-
-export const useOnlyUserFields = (): string[] => [
-    'first_name', 'last_name', 'full_name', 'email', 'phone', 'search', 'location', 'source',
-]

@@ -90,7 +90,7 @@ function Users() {
                         key: 'send_push',
                         label: 'Send Push',
                         icon: <RocketOutlined />,
-                        onClick: () => navigate(`/admin/lists/${list._id}/campaigns?action=add&type=onetime&user_filters=${record._id}`),
+                        onClick: () => navigate(`/admin/lists/${list._id}/campaigns?action=add&type=onetime&audience=filtered&user_filters=${record._id}`),
                     }]
                 }}
             >

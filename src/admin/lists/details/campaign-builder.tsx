@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Alert, Button, Card, message, Modal, Popconfirm, Space, Timeline } from 'antd'
 import {
     ProFormSelect, ProFormText, ProFormTextArea, StepsForm, ProFormDependency, ProFormRadio,
-    ProFormItem, ProFormDateTimePicker, ProForm, ProFormSegmented, ProFormDigit
+    ProFormItem, ProFormDateTimePicker, ProForm, ProFormSegmented, ProFormDigit, ProFormTimePicker
 } from '@ant-design/pro-components'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import type { ProFormInstance } from '@ant-design/pro-components'
@@ -131,7 +131,6 @@ function CampaignBuilder() {
                     <StepsForm.StepForm
                         formRef={formBasicRef}
                         requiredMark="optional"
-                        name="base"
                         title="Basic"
                         stepProps={{ description: 'General information' }}
                     >
@@ -156,7 +155,6 @@ function CampaignBuilder() {
                     </StepsForm.StepForm>
                     <StepsForm.StepForm
                         formRef={formFiltersRef}
-                        name="checkbox"
                         title="Audience"
                         requiredMark="optional"
                         stepProps={{ description: 'Filters your audience' }}
@@ -235,7 +233,6 @@ function CampaignBuilder() {
                     <StepsForm.StepForm
                         formRef={formComposeRef}
                         requiredMark="optional"
-                        name="message"
                         title="Message"
                         stepProps={{ description: 'Compose your message' }}
                         onFinish={async () => {
@@ -310,25 +307,38 @@ function CampaignBuilder() {
                     </StepsForm.StepForm>
                     <StepsForm.StepForm
                         title="Send"
-                        name="time"
                         formRef={formSendRef}
                         requiredMark="optional"
                         stepProps={{ description: 'Schedule or Send' }}
                     >
-                        <ProFormDateTimePicker
-                            label="Sending Time"
-                            name="trigger"
-                            rules={[{ required: true }]}
-                            fieldProps={{
-                                disabledDate: (c: any) => c && c.unix() < dayjs().startOf('day').unix(),
-                                disabledTime: (c: any) => ({
-                                    disabledHours: () => c && c < dayjs() ? Array.from(Array(c.hour()).keys()) : [],
-                                    disabledMinutes: () => c && c < dayjs() ? Array.from(Array(c.minute() + 1).keys()) : [],
-                                }),
-                                showTime: { format: 'HH:mm' },
-                                format: "YYYY-MM-DD HH:mm"
+                        <ProFormDependency name={[]}>
+                            {() => {
+                                const type = formBasicRef?.current?.getFieldValue('type')
+
+                                if (type === 'onetime') {
+                                    return <ProFormDateTimePicker
+                                        label="Sending Time"
+                                        name="timestamp"
+                                        rules={[{ required: true }]}
+                                        fieldProps={{
+                                            disabledDate: (c: any) => c && c.unix() < dayjs().startOf('day').unix(),
+                                            disabledTime: (c: any) => ({
+                                                disabledHours: () => c && c < dayjs() ? Array.from(Array(c.hour()).keys()) : [],
+                                                disabledMinutes: () => c && c < dayjs() ? Array.from(Array(c.minute() + 1).keys()) : [],
+                                            }),
+                                            showTime: { format: 'HH:mm' },
+                                            format: "YYYY-MM-DD HH:mm"
+                                        }}
+                                    />
+                                }
+                                return <ProFormTimePicker
+                                    label="Daily start at"
+                                    name="trigger"
+                                    rules={[{ required: true }]}
+                                    fieldProps={{ format: "HH:mm" }}
+                                />
                             }}
-                        />
+                        </ProFormDependency>
                     </StepsForm.StepForm>
                 </StepsForm>
             </Card>

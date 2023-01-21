@@ -10,7 +10,7 @@ import {
 } from '@ant-design/pro-components'
 import type { ProFormProps } from '@ant-design/pro-components'
 import { useAdImages, useAdTags, useProviders } from '../hooks/cache'
-import { useIconTypes, useOnlyUserFields } from '../hooks/tags'
+import { useIconTypes, useProfileFields } from '../hooks/tags'
 import { appendSearchParams } from '../utils/urls'
 
 type AdComposerProps = {
@@ -21,7 +21,7 @@ function AdComposer(props: AdComposerProps) {
     const providers = useProviders()
     const adTags = useAdTags()
     const adImages = useAdImages()
-    const userFields = useOnlyUserFields()
+    const userFields = useProfileFields()
     const iconTypes = useIconTypes()
     const { hideName, ...rest } = props
 
@@ -101,7 +101,9 @@ function AdComposer(props: AdComposerProps) {
                             name="ad_link"
                             label="Link"
                             placeholder="The link used for the ad..."
-                            extra={<small>Available Tags: {'{{' + userFields.join('}}, {{') + '}}'}</small>}
+                            extra={
+                                <small>Available Tags: {'{{' + userFields.map(({ value }) => value).join('}}, {{') + '}}'}</small>
+                            }
                             rules={[{ required: true }]}
                         />
 
@@ -110,7 +112,7 @@ function AdComposer(props: AdComposerProps) {
                             label="Link Params"
                             showSearch={true}
                             mode="multiple"
-                            options={userFields.map(f => ({ label: f, value: f }))}
+                            options={userFields}
                             extra={message && <Alert message={message} type="info" style={{ marginTop: 10 }} />}
                         />
                     </>
