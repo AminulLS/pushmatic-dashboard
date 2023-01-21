@@ -67,6 +67,10 @@ export const useSegmentTypes = (): DefaultValue[] => [
         value: 'user'
     },
     {
+        label: 'Topic',
+        value: 'topic'
+    },
+    {
         label: 'All Time Clicks',
         value: 'clicks_any'
     },
@@ -300,10 +304,6 @@ export const useAvailableCampaignTypes = (): DefaultValue[] => [
     {
         label: 'Scheduled',
         value: 'scheduled',
-    },
-    {
-        label: 'Funnel',
-        value: "funnel",
     },
 ]
 
