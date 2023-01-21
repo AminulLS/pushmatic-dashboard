@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Menu, Result, Spin } from 'antd'
 import type { MenuProps } from 'antd'
 import {
-    AppstoreOutlined, CalendarOutlined, ClusterOutlined, FilePdfOutlined,
+    AppstoreOutlined, ClusterOutlined, FilePdfOutlined,
     FileTextOutlined, RadarChartOutlined, SettingOutlined, UserOutlined
 } from '@ant-design/icons'
 import { useApiClient } from '../../hooks/api'

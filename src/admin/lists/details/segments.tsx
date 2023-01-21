@@ -99,7 +99,7 @@ function Segments() {
                     </Button>
                 ]}
                 columns={columns}
-                request={(params) => {
+                request={async (params) => {
                     params.list_id = list._id
                     const qs = (new URLSearchParams(params)).toString()
 

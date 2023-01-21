@@ -104,7 +104,7 @@ function Users() {
             scroll={{ x: 1000 }}
             columns={columns}
             rowKey="_id"
-            request={(params) => {
+            request={async (params) => {
                 params.list_id = list._id
                 const qs = new URLSearchParams(params)
 

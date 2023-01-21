@@ -106,7 +106,7 @@ function Index() {
                 scroll={{ x: 1000 }}
                 search={{ filterType: 'light' }}
                 columns={columns}
-                request={(params) => {
+                request={async (params) => {
                     params.id = list._id
 
                     const qs = new URLSearchParams(params)

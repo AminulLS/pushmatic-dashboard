@@ -1,5 +1,5 @@
-import { Card, Image, Space } from 'antd'
 import React from 'react'
+import { Image, Space } from 'antd'
 import { useAdImages } from '../hooks/cache'
 import type { AdItem } from '../types/ads'
 import type { CardProps } from 'antd'

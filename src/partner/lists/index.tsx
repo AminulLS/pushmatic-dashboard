@@ -88,7 +88,7 @@ function Index() {
             scroll={{ x: 1000 }}
             columns={columns}
             rowKey="_id"
-            request={(params) => {
+            request={async (params) => {
                 const qs = new URLSearchParams(params)
 
                 return apiClient.get(`/lists?${qs.toString()}`).then(({ data }) => data)

@@ -69,7 +69,7 @@ function Reports() {
                 bordered={true}
                 scroll={{ x: 1000 }}
                 columns={[...reportColumns[activeKey], ...actions]}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -112,7 +112,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.ad}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -133,7 +133,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.source}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -154,7 +154,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.optin}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -175,7 +175,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.device}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -196,7 +196,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.os}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -217,7 +217,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.browser}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -238,7 +238,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.provider}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
@@ -269,7 +269,7 @@ function Reports() {
                 scroll={{ x: 1000 }}
                 columns={reportColumns.hourly}
                 search={{ filterType: 'light' }}
-                request={(params) => {
+                request={async (params) => {
                     const qs = (new URLSearchParams(params)).toString()
 
                     return apiClient
