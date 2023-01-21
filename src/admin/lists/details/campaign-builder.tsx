@@ -404,6 +404,7 @@ function CampaignBuilder() {
                         name="name"
                         label="Ad Name"
                         placeholder="Please select a ad."
+                        showSearch={true}
                         request={async () => {
                             const params = {
                                 list_id: list._id,
